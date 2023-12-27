@@ -1,0 +1,18 @@
+.signinput {
+    height: 50px;
+    width: 300px;
+    border-radius: 10px;
+    padding-left: 10px;
+    margin-bottom: 15px;
+    border: 2px solid transparent;
+    font-family: 'Oswald', sans-serif;
+}
+.signSubmit{
+    margin-top: 15px;
+    height: 35px;
+    border-radius: 15px;
+    border: 2px solid transparent;
+    font-family: "Montserrat";
+    font-weight: bold;
+
+}
