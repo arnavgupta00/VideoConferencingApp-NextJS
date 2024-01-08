@@ -4,7 +4,8 @@ import { setRoomNoVar, setFormData, formData, roomNoVar, addClient, getClients }
 import "dotenv/config";
 
 
-export const socket = new WebSocket("ws://192.168.18.201:30120");
+export const socket = new WebSocket("wss://videochatsignallingserverrender.onrender.com/");
+
 
 export var userAction = "";
 
