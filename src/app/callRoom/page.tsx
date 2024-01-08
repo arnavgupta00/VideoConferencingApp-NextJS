@@ -55,6 +55,7 @@ const page = () => {
   };
 
   const sendOffer = async (client: string) => {
+    console.log("OFFER SENT TO", client);
     const pcStore: RTCPeerConnection = new RTCPeerConnection(configuration);
     trackEventSetup(pcStore, client);
     eventlistenerSetup(pcStore, client);
@@ -255,46 +256,41 @@ const page = () => {
     }
   };
 
-  const handleChat = (data:any) => {
+  const handleChat = (data: any) => {
     console.log("CHAT RECIEVED", data);
 
-    var messageComp : JSX.Element= <div style={{textAlign:"left" , width:"100%"}}>
-      <h3 style={{margin:0}}>{data.message}</h3>
-      <h5 style={{margin:0}}>{data.senderID}</h5>
-      <br/>
+    var messageComp: JSX.Element = (
+      <div style={{ textAlign: "left", width: "100%" }}>
+        <h3 style={{ margin: 0 }}>{data.message}</h3>
+        <h5 style={{ margin: 0 }}>{data.senderID}</h5>
+        <br />
+      </div>
+    );
 
-    </div>
-
-    setMessageList((prevList)=>[...prevList,messageComp])
-
-  }
-  const handleSendChat = (message:string) => {
-    
+    setMessageList((prevList) => [...prevList, messageComp]);
+  };
+  const handleSendChat = (message: string) => {
     socket.send(
       JSON.stringify({
         type: "chat",
         message: message,
-        senderName : "Arnav"
+        senderName: "Arnav",
       })
     );
-    
-    var messageComp : JSX.Element= <div style={{textAlign:"right" , width:"100%"}}>
-      <h3 style={{margin:0}}>{message}</h3>
-      <br/>
 
-    </div>
+    var messageComp: JSX.Element = (
+      <div style={{ textAlign: "right", width: "100%" }}>
+        <h3 style={{ margin: 0 }}>{message}</h3>
+        <br />
+      </div>
+    );
 
-    setMessageList((prevList)=>[...prevList,messageComp])
-
-  }
+    setMessageList((prevList) => [...prevList, messageComp]);
+  };
   const connectionInitiator = async (list: string[]) => {
     const pcList = getPeerConnections();
 
-    list.forEach(async (client) => {
-      if (!pcList[client]) {
-        await sendOffer(client);
-      }
-    });
+    
 
     socket.onmessage = async (event) => {
       const data = await JSON.parse(event.data);
@@ -319,10 +315,26 @@ const page = () => {
             addClient(client);
           }
         });
-      }else if(data.type === "chat"){
-
+        console.log("CLIENT LIST RECIEVED", data);
+        
+      } else if(data.type === "initialClientList"){
+        var listClients = getClients();
+        data.list.forEach((client: string) => {
+          if (listClients.includes(client) === false) {
+            addClient(client);
+          }
+        });
+        var clientList = getClients();
+        const clientListSet = new Set(clientList);
+        clientList = Array.from(clientListSet);
+        clientList.forEach(async (client) => {
+          if (!pcList[client]) {
+            await sendOffer(client);
+          }
+        });
+        console.log("INI CLIENT LIST RECIEVED", data);
+      }else if (data.type === "chat") {
         handleChat(data);
-
       } else {
         console.log("RECIEVED SOMETHING ELSE", data);
       }
@@ -361,10 +373,10 @@ const page = () => {
   const handleTrackEvent = (event: any, clientID: string) => {
     console.log("track event", event.track);
     const track = event.track;
-    
+
     var mediaStream = clientStreamMap.get(clientID) || new MediaStream();
 
-    if(track.kind === "audio"){
+    if (track.kind === "audio") {
       mediaStream = new MediaStream();
     }
     if (track.kind === "video") {
@@ -408,7 +420,7 @@ const page = () => {
         video: videoPremission,
         audio: audioPremission,
       });
-      setLocalStreamState(stream)
+      setLocalStreamState(stream);
       setStreamLocal(stream);
 
       //await addTrackAddon(streamLocal);
@@ -421,31 +433,28 @@ const page = () => {
     }
   };
 
-  const manageStreamControls = (changeNeeded:string) => {
+  const manageStreamControls = (changeNeeded: string) => {
     const localStream = streamLocal;
     const audioTrack = localStream.getAudioTracks()[0]; // Assuming there is only one audio track
     const videoTrack = localStream.getVideoTracks()[0]; // Assuming there is only one video track
 
     if (audioTrack && !audioPremission && changeNeeded === "audio") {
       audioTrack.enabled = true;
-      setAudioPremission(true)
+      setAudioPremission(true);
     }
     if (videoTrack && !videoPremission && changeNeeded === "video") {
       videoTrack.enabled = true;
-      setVideoPremission(true)
+      setVideoPremission(true);
     }
     if (audioTrack && audioPremission && changeNeeded === "audio") {
       audioTrack.enabled = false;
-      setAudioPremission(false)
+      setAudioPremission(false);
     }
 
-    
     if (videoTrack && videoPremission && changeNeeded === "video") {
       videoTrack.enabled = false;
-      setVideoPremission(false)
+      setVideoPremission(false);
     }
-
-
   };
 
   const eventlistenerSetup = (pc: RTCPeerConnection, clientID: string) => {
@@ -528,10 +537,10 @@ const page = () => {
             marginTop: "3.5%",
             backgroundColor: "hsla(0, 0%, 0%, 0.200)",
             opacity: 0.7,
-            padding:"15px"
+            padding: "15px",
           }}
         >
-          <div style={{  width: "100%", height: "40%" }}>
+          <div style={{ width: "100%", height: "40%" }}>
             {localaStreamState ? (
               <ReactPlayer
                 url={localaStreamState}
@@ -541,9 +550,8 @@ const page = () => {
                 style={{
                   width: "95%",
                   height: "90%",
-                 
-                  
-                  display:"inline"
+
+                  display: "inline",
                 }}
               ></ReactPlayer>
             ) : (
@@ -556,23 +564,29 @@ const page = () => {
                 }}
               ></div>
             )}
-            <button onClick={() => manageStreamControls("video")}>
-              Video
-            </button>
-            <button onClick={() => manageStreamControls("audio")}>
-              Audio
-            </button>
-            
+            <button onClick={() => manageStreamControls("video")}>Video</button>
+            <button onClick={() => manageStreamControls("audio")}>Audio</button>
           </div>
-          <div style={{height:"60%" ,width:"100%"}}>
-            <div style={{height:"75%",width:"100%",overflowY:"hidden" , color:"beige", marginTop:"10%"}}>
-              {messageList.map((message)=>(
-                message
-              ))}
+          <div style={{ height: "60%", width: "100%" }}>
+            <div
+              style={{
+                height: "75%",
+                width: "100%",
+                overflowY: "hidden",
+                color: "beige",
+                marginTop: "10%",
+              }}
+            >
+              {messageList.map((message) => message)}
             </div>
-            <div style={{height:"20%",width:"100%"}}>
-              <input type="text" onChange={(event)=>{setMessage(event.target.value)}} />
-              <button onClick={()=>handleSendChat(message)}>Send</button>
+            <div style={{ height: "20%", width: "100%" }}>
+              <input
+                type="text"
+                onChange={(event) => {
+                  setMessage(event.target.value);
+                }}
+              />
+              <button onClick={() => handleSendChat(message)}>Send</button>
             </div>
           </div>
         </div>
