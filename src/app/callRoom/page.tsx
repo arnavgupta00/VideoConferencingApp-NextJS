@@ -138,9 +138,9 @@ const page = () => {
     const pcStore: RTCPeerConnection = new RTCPeerConnection(configuration);
     trackEventSetup(pcStore, data.senderID);
     eventlistenerSetup(pcStore, data.senderID);
-    negotiationEventlistenerSetup(pcStore, data.senderID);
-    addPeerConnection(data.senderID, pcStore);
 
+    addPeerConnection(data.senderID, pcStore);
+    negotiationEventlistenerSetup(pcStore, data.senderID);
     const pcList = getPeerConnections();
     const pc = pcList[data.senderID];
 
@@ -177,7 +177,7 @@ const page = () => {
       })
     );
 
-    addTrackAddon(streamLocal);
+    //addTrackAddon(streamLocal);
   };
 
   const handleIceCandidate = (event: any, clientId: any) => {
@@ -297,12 +297,10 @@ const page = () => {
         await sendOffer(client);
       }
     });
-  }
+  };
 
   const connectionInitiator = async (list: string[]) => {
     const pcList = getPeerConnections();
-
-    
 
     socket.onmessage = async (event) => {
       const data = await JSON.parse(event.data);
@@ -328,8 +326,7 @@ const page = () => {
           }
         });
         console.log("CLIENT LIST RECIEVED", data);
-        
-      } else if(data.type === "initialClientList"){
+      } else if (data.type === "initialClientList") {
         var listClients = getClients();
         data.list.forEach((client: string) => {
           if (listClients.includes(client) === false) {
@@ -345,7 +342,7 @@ const page = () => {
           }
         });
         console.log("INI CLIENT LIST RECIEVED", data);
-      }else if (data.type === "chat") {
+      } else if (data.type === "chat") {
         handleChat(data);
       } else {
         console.log("RECIEVED SOMETHING ELSE", data);
@@ -364,17 +361,21 @@ const page = () => {
       const pcList = getPeerConnections();
       const pc = pcList[client];
       if (stream) {
-        const existingSender = pc.getSenders().find((sender) => {
-          return sender.track === stream.getTracks()[0];
-        });
+        if (pc) {
 
-        if (!existingSender) {
-          stream.getTracks().forEach((track) => pc.addTrack(track, stream));
+          try{
+            negotiationEventlistenerSetup(pc, client);
+            stream.getTracks().forEach((track) => pc.addTrack(track, stream));
+            console.log(
+              `TRACK ADDED BY FUNCTION FOR ${client}`,
+              stream.getTracks()
+            );
+          }catch(err){
+            console.log("error",err)
+          }
+          
 
-          console.log(
-            `TRACK ADDED BY FUNCTION FOR ${client}`,
-            stream.getTracks()
-          );
+          
         }
       }
 
@@ -435,6 +436,23 @@ const page = () => {
       setLocalStreamState(stream);
       setStreamLocal(stream);
 
+      //await addTrackAddon(streamLocal);
+
+      if (localVideoRef.current) {
+        localVideoRef.current.srcObject = streamLocal;
+      }
+    } catch (error) {
+      console.error("Error accessing local media:", error);
+    }
+  };
+  const startScreenStream = async () => {
+    try {
+      const stream: MediaStream = await navigator.mediaDevices.getDisplayMedia({
+        video: videoPremission,
+        audio: audioPremission,
+      });
+      setLocalStreamState(stream)
+      addTrackAddon(stream);
       //await addTrackAddon(streamLocal);
 
       if (localVideoRef.current) {
@@ -578,6 +596,7 @@ const page = () => {
             )}
             <button onClick={() => manageStreamControls("video")}>Video</button>
             <button onClick={() => manageStreamControls("audio")}>Audio</button>
+            <button onClick={() => startScreenStream()}>Audio</button>
           </div>
           <div style={{ height: "60%", width: "100%" }}>
             <div
@@ -621,7 +640,13 @@ const page = () => {
             paddingTop: "30px",
             paddingBottom: "20px",
           }}
-        > {remoteStream.length === 0 ? <button onClick={()=>handleStartVideoButton()} style={{}}>Click To Start(only for room joinee)</button> : null}
+        >
+          {" "}
+          {remoteStream.length === 0 ? (
+            <button onClick={() => handleStartVideoButton()} style={{}}>
+              Click To Start(only for room joinee)
+            </button>
+          ) : null}
           {remoteStream.map((stream: MediaStream) => (
             <ReactPlayer
               style={{
