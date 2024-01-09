@@ -287,6 +287,18 @@ const page = () => {
 
     setMessageList((prevList) => [...prevList, messageComp]);
   };
+  const handleStartVideoButton = () => {
+    const pcList = getPeerConnections();
+    const clientList = getClients();
+    const clientListSet = new Set(clientList);
+    const clientListArray = Array.from(clientListSet);
+    clientListArray.forEach(async (client) => {
+      if (!pcList[client]) {
+        await sendOffer(client);
+      }
+    });
+  }
+
   const connectionInitiator = async (list: string[]) => {
     const pcList = getPeerConnections();
 
@@ -575,6 +587,8 @@ const page = () => {
                 overflowY: "hidden",
                 color: "beige",
                 marginTop: "10%",
+                overflow: "scroll",
+                overflowX: "hidden",
               }}
             >
               {messageList.map((message) => message)}
@@ -607,7 +621,7 @@ const page = () => {
             paddingTop: "30px",
             paddingBottom: "20px",
           }}
-        >
+        > {remoteStream.length === 0 ? <button onClick={()=>handleStartVideoButton()} style={{}}>Click To Start(only for room joinee)</button> : null}
           {remoteStream.map((stream: MediaStream) => (
             <ReactPlayer
               style={{
