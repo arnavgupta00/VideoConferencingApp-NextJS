@@ -5,6 +5,14 @@ import Navbar from "@/components/navbar/navbar";
 import { useRef, useEffect, useState } from "react";
 import { socket, userAction } from "@/components/functions/function";
 import ReactPlayer from "react-player";
+import {
+  Video,
+  VideoOff,
+  Mic,
+  MicOff,
+  ScreenShare,
+  ScreenShareIcon,
+} from "lucide-react";
 
 import {
   streamLocal,
@@ -286,6 +294,7 @@ const page = () => {
     );
 
     setMessageList((prevList) => [...prevList, messageComp]);
+    setMessage("");
   };
   const handleStartVideoButton = () => {
     const pcList = getPeerConnections();
@@ -362,20 +371,16 @@ const page = () => {
       const pc = pcList[client];
       if (stream) {
         if (pc) {
-
-          try{
+          try {
             negotiationEventlistenerSetup(pc, client);
             stream.getTracks().forEach((track) => pc.addTrack(track, stream));
             console.log(
               `TRACK ADDED BY FUNCTION FOR ${client}`,
               stream.getTracks()
             );
-          }catch(err){
-            console.log("error",err)
+          } catch (err) {
+            console.log("error", err);
           }
-          
-
-          
         }
       }
 
@@ -451,7 +456,7 @@ const page = () => {
         video: videoPremission,
         audio: audioPremission,
       });
-      setLocalStreamState(stream)
+      setLocalStreamState(stream);
       addTrackAddon(stream);
       //await addTrackAddon(streamLocal);
 
@@ -523,7 +528,10 @@ const page = () => {
       handleTrackEvent(event, clientID);
     };
   };
-
+  const handleFormSubmit=(event: any)=>{
+    event.preventDefault();
+    handleSendChat(message)
+  }
   useEffect(() => {
     var clientList = getClients();
     const clientListSet = new Set(clientList);
@@ -568,6 +576,10 @@ const page = () => {
             backgroundColor: "hsla(0, 0%, 0%, 0.200)",
             opacity: 0.7,
             padding: "15px",
+            display: "flex",
+            justifyContent: "space-between",
+            alignItems: "center",
+            flexDirection: "column",
           }}
         >
           <div style={{ width: "100%", height: "40%" }}>
@@ -594,11 +606,57 @@ const page = () => {
                 }}
               ></div>
             )}
-            <button onClick={() => manageStreamControls("video")}>Video</button>
-            <button onClick={() => manageStreamControls("audio")}>Audio</button>
-            <button onClick={() => startScreenStream()}>Audio</button>
+            <div
+              style={{
+                display: "flex",
+                flexDirection: "row",
+                justifyContent: "flex-start",
+                alignItems: "center",
+                paddingLeft: "30px",
+                paddingRight: "30px",
+                gap: "30px",
+                opacity:0.5,
+                
+              }}
+            >
+              {videoPremission ? (
+                <Video
+                  style={{ color: "white", scale: "1.5" }}
+                  onClick={() => {
+                    manageStreamControls("video");
+                  }}
+                />
+              ) : (
+                <VideoOff
+                  style={{ color: "white", scale: "1.5" }}
+                  onClick={() => {
+                    manageStreamControls("video");
+                  }}
+                />
+              )}
+              {audioPremission ? (
+                <Mic
+                  style={{ color: "white", scale: "1.5" }}
+                  onClick={() => {
+                    manageStreamControls("audio");
+                  }}
+                />
+              ) : (
+                <MicOff
+                  style={{ color: "white", scale: "1.5" }}
+                  onClick={() => {
+                    manageStreamControls("audio");
+                  }}
+                />
+              )}
+
+              <ScreenShare
+                style={{ color: "white", scale: "1.5", margin: "15px" }}
+                onClick={() => startScreenStream()}
+              />
+            </div>
           </div>
-          <div style={{ height: "60%", width: "100%" }}>
+          <div style={{ height: "55%", width: "100%" }}>
             <div
               style={{
                 height: "75%",
@@ -610,17 +668,48 @@ const page = () => {
                 overflowX: "hidden",
               }}
             >
-              {messageList.map((message) => message)}
+              <div style={{ paddingLeft: "15px", paddingRight: "15px" }}>
+                {messageList.map((message) => message)}
+              </div>
             </div>
-            <div style={{ height: "20%", width: "100%" }}>
+            <form
+              style={{
+                height: "20%",
+                width: "100%",
+                display: "flex",
+                justifyContent: "space-between",
+                alignItems: "center",
+              }}
+              onSubmit={(event) => handleFormSubmit(event)}
+            >
               <input
                 type="text"
                 onChange={(event) => {
                   setMessage(event.target.value);
                 }}
+                value={message}
+                style={{
+                  width: "75%",
+                  height: "50%",
+                  borderRadius: "10px",
+                  fontSize: "20px",
+                  backgroundColor: "rgba(255,255,255,0.5)",
+                  color: "#0c2937",
+                  borderColor: "transparent",
+                }}
               />
-              <button onClick={() => handleSendChat(message)}>Send</button>
-            </div>
+              <button
+                style={{
+                  width: "20%",
+                  height: "60%",
+                  borderRadius: "10px",
+                  opacity: "0.7",
+                }}
+                onClick={() => handleSendChat(message)}
+              >
+                Send
+              </button>
+            </form>
           </div>
         </div>
         <div
