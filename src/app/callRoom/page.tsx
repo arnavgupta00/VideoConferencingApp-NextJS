@@ -1,10 +1,13 @@
 "use client";
 import "@/app/page.css";
 import "@/app/[roomAction]/page.css";
+import "@/app/callRoom/page.css";
 import Navbar from "@/components/navbar/navbar";
 import { useRef, useEffect, useState } from "react";
 import { socket, userAction } from "@/components/functions/function";
 import ReactPlayer from "react-player";
+import useMediaQuery from "@mui/material/useMediaQuery";
+
 import {
   Video,
   VideoOff,
@@ -44,6 +47,8 @@ const page = () => {
   const [localaStreamState, setLocalStreamState] = useState<MediaStream>();
 
   const [remoteStream, setRemoteStream] = useState<MediaStream[]>([]);
+
+  const isMobileOrTablet = useMediaQuery("(max-width: 767px)");
 
   const [videoPremission, setVideoPremission] = useState<boolean>(true);
   const [audioPremission, setAudioPremission] = useState<boolean>(true);
@@ -528,10 +533,11 @@ const page = () => {
       handleTrackEvent(event, clientID);
     };
   };
-  const handleFormSubmit=(event: any)=>{
+  const handleFormSubmit = (event: any) => {
     event.preventDefault();
-    handleSendChat(message)
-  }
+    handleSendChat(message);
+  };
+
   useEffect(() => {
     var clientList = getClients();
     const clientListSet = new Set(clientList);
@@ -556,69 +562,23 @@ const page = () => {
   return (
     <>
       <Navbar />
-      <div
-        id="mainLayoutDiv"
-        style={{
-          display: "flex",
-          flexDirection: "row",
-          justifyContent: "center",
-          alignItems: "center",
-        }}
-      >
-        <div
-          id="mainLayoutDivSub1"
-          style={{
-            width: "20%",
-            margin: "1%",
-            marginLeft: ".5%",
-            height: "85vh",
-            marginTop: "3.5%",
-            backgroundColor: "hsla(0, 0%, 0%, 0.200)",
-            opacity: 0.7,
-            padding: "15px",
-            display: "flex",
-            justifyContent: "space-between",
-            alignItems: "center",
-            flexDirection: "column",
-          }}
-        >
-          <div style={{ width: "100%", height: "40%" }}>
+      <div id="mainLayoutDiv">
+        <div id="mainLayoutDivSub1">
+          <div className="mainLayoutDivSub1VideoBox">
             {localaStreamState ? (
               <ReactPlayer
+                className="mainLayoutDivSub1VideoBoxVideo"
                 url={localaStreamState}
                 playing
                 playsInline
                 muted
-                style={{
-                  width: "95%",
-                  height: "90%",
-
-                  display: "inline",
-                }}
               ></ReactPlayer>
             ) : (
               <div
-                style={{
-                  width: "95%",
-                  margin: "2.5%",
-                  height: "90%",
-                  backgroundColor: "white",
-                }}
+              
               ></div>
             )}
-            <div
-              style={{
-                display: "flex",
-                flexDirection: "row",
-                justifyContent: "flex-start",
-                alignItems: "center",
-                paddingLeft: "30px",
-                paddingRight: "30px",
-                gap: "30px",
-                opacity:0.5,
-                
-              }}
-            >
+            <div className="mainLayoutDivSub1VideoBoxControls">
               {videoPremission ? (
                 <Video
                   style={{ color: "white", scale: "1.5" }}
@@ -636,6 +596,7 @@ const page = () => {
               )}
               {audioPremission ? (
                 <Mic
+                  className="mainLayoutDivSub1VideoBoxControlsMic"
                   style={{ color: "white", scale: "1.5" }}
                   onClick={() => {
                     manageStreamControls("audio");
@@ -643,6 +604,7 @@ const page = () => {
                 />
               ) : (
                 <MicOff
+                  className="mainLayoutDivSub1VideoBoxControlsMic"
                   style={{ color: "white", scale: "1.5" }}
                   onClick={() => {
                     manageStreamControls("audio");
@@ -651,91 +613,49 @@ const page = () => {
               )}
 
               <ScreenShare
+                className="mainLayoutDivSub1VideoBoxControlsScreenShare"
                 style={{ color: "white", scale: "1.5", margin: "15px" }}
                 onClick={() => startScreenStream()}
               />
             </div>
           </div>
-          <div style={{ height: "55%", width: "100%" }}>
-            <div
-              style={{
-                height: "75%",
-                width: "100%",
-                overflowY: "hidden",
-                color: "beige",
-                marginTop: "10%",
-                overflow: "scroll",
-                overflowX: "hidden",
-              }}
-            >
-              <div style={{ paddingLeft: "15px", paddingRight: "15px" }}>
-                {messageList.map((message) => message)}
+          {isMobileOrTablet ? (
+            <div></div>
+          ) : (
+            <div className="chatSystem">
+              <div className="chatDisplayBox">
+                <div className="chatMessages">
+                  {messageList.map((message) => message)}
+                </div>
               </div>
-            </div>
-            <form
-              style={{
-                height: "20%",
-                width: "100%",
-                display: "flex",
-                justifyContent: "space-between",
-                alignItems: "center",
-              }}
-              onSubmit={(event) => handleFormSubmit(event)}
-            >
-              <input
-                type="text"
-                onChange={(event) => {
-                  setMessage(event.target.value);
-                }}
-                value={message}
-                style={{
-                  width: "75%",
-                  height: "50%",
-                  borderRadius: "10px",
-                  fontSize: "20px",
-                  backgroundColor: "rgba(255,255,255,0.5)",
-                  color: "#0c2937",
-                  borderColor: "transparent",
-                }}
-              />
-              <button
-                style={{
-                  width: "20%",
-                  height: "60%",
-                  borderRadius: "10px",
-                  opacity: "0.7",
-                }}
-                onClick={() => handleSendChat(message)}
+              <form
+                className="chatSubmitBoxForm"
+                onSubmit={(event) => handleFormSubmit(event)}
               >
-                Send
-              </button>
-            </form>
-          </div>
+                <input
+                  type="text"
+                  onChange={(event) => {
+                    setMessage(event.target.value);
+                  }}
+                  value={message}
+                />
+                <button onClick={() => handleSendChat(message)}>Send</button>
+              </form>
+            </div>
+          )}
         </div>
-        <div
-          id="mainLayoutDivSub2"
-          style={{
-            textDecoration: "none",
-            width: "77%",
-            margin: "1%",
-            marginRight: ".5%",
-            height: "85vh",
-            marginTop: "3.5%",
-            backgroundColor: "hsla(0, 0%, 0%, 0.200)",
-            opacity: 0.7,
-            display: "flex",
-            flexDirection: "row",
-            flexWrap: "wrap",
-            paddingTop: "30px",
-            paddingBottom: "20px",
-          }}
-        >
-          {" "}
-          {remoteStream.length === 0 ? (
-            <button onClick={() => handleStartVideoButton()} style={{}}>
-              Click To Start(only for room joinee)
-            </button>
-          ) : null}
+        <div id="mainLayoutDivSub2">
+          {remoteStream.length === 0
+            ? userAction == "joinRoom" && (
+                <button
+                  className="mainLayoutDivSub2JoinBtn"
+                  onClick={() => handleStartVideoButton()}
+                  style={{}}
+                >
+                  Click To Join
+                </button>
+              )
+            : null}
           {remoteStream.map((stream: MediaStream) => (
             <ReactPlayer
               style={{
