@@ -1,10 +1,21 @@
 "use client";
 import "@/app/page.css";
 import "@/app/[roomAction]/page.css";
+import "@/app/callRoom/page.css";
 import Navbar from "@/components/navbar/navbar";
 import { useRef, useEffect, useState } from "react";
 import { socket, userAction } from "@/components/functions/function";
 import ReactPlayer from "react-player";
+import useMediaQuery from "@mui/material/useMediaQuery";
+
+import {
+  Video,
+  VideoOff,
+  Mic,
+  MicOff,
+  ScreenShare,
+  ScreenShareIcon,
+} from "lucide-react";
 
 import {
   streamLocal,
@@ -36,6 +47,8 @@ const page = () => {
   const [localaStreamState, setLocalStreamState] = useState<MediaStream>();
 
   const [remoteStream, setRemoteStream] = useState<MediaStream[]>([]);
+
+  const isMobileOrTablet = useMediaQuery("(max-width: 767px)");
 
   const [videoPremission, setVideoPremission] = useState<boolean>(true);
   const [audioPremission, setAudioPremission] = useState<boolean>(true);
@@ -138,9 +151,9 @@ const page = () => {
     const pcStore: RTCPeerConnection = new RTCPeerConnection(configuration);
     trackEventSetup(pcStore, data.senderID);
     eventlistenerSetup(pcStore, data.senderID);
-    negotiationEventlistenerSetup(pcStore, data.senderID);
-    addPeerConnection(data.senderID, pcStore);
 
+    addPeerConnection(data.senderID, pcStore);
+    negotiationEventlistenerSetup(pcStore, data.senderID);
     const pcList = getPeerConnections();
     const pc = pcList[data.senderID];
 
@@ -177,7 +190,7 @@ const page = () => {
       })
     );
 
-    addTrackAddon(streamLocal);
+    //addTrackAddon(streamLocal);
   };
 
   const handleIceCandidate = (event: any, clientId: any) => {
@@ -286,11 +299,22 @@ const page = () => {
     );
 
     setMessageList((prevList) => [...prevList, messageComp]);
+    setMessage("");
   };
+  const handleStartVideoButton = () => {
+    const pcList = getPeerConnections();
+    const clientList = getClients();
+    const clientListSet = new Set(clientList);
+    const clientListArray = Array.from(clientListSet);
+    clientListArray.forEach(async (client) => {
+      if (!pcList[client]) {
+        await sendOffer(client);
+      }
+    });
+  };
+
   const connectionInitiator = async (list: string[]) => {
     const pcList = getPeerConnections();
-
-    
 
     socket.onmessage = async (event) => {
       const data = await JSON.parse(event.data);
@@ -316,8 +340,7 @@ const page = () => {
           }
         });
         console.log("CLIENT LIST RECIEVED", data);
-        
-      } else if(data.type === "initialClientList"){
+      } else if (data.type === "initialClientList") {
         var listClients = getClients();
         data.list.forEach((client: string) => {
           if (listClients.includes(client) === false) {
@@ -333,7 +356,7 @@ const page = () => {
           }
         });
         console.log("INI CLIENT LIST RECIEVED", data);
-      }else if (data.type === "chat") {
+      } else if (data.type === "chat") {
         handleChat(data);
       } else {
         console.log("RECIEVED SOMETHING ELSE", data);
@@ -352,17 +375,17 @@ const page = () => {
       const pcList = getPeerConnections();
       const pc = pcList[client];
       if (stream) {
-        const existingSender = pc.getSenders().find((sender) => {
-          return sender.track === stream.getTracks()[0];
-        });
-
-        if (!existingSender) {
-          stream.getTracks().forEach((track) => pc.addTrack(track, stream));
-
-          console.log(
-            `TRACK ADDED BY FUNCTION FOR ${client}`,
-            stream.getTracks()
-          );
+        if (pc) {
+          try {
+            negotiationEventlistenerSetup(pc, client);
+            stream.getTracks().forEach((track) => pc.addTrack(track, stream));
+            console.log(
+              `TRACK ADDED BY FUNCTION FOR ${client}`,
+              stream.getTracks()
+            );
+          } catch (err) {
+            console.log("error", err);
+          }
         }
       }
 
@@ -423,6 +446,23 @@ const page = () => {
       setLocalStreamState(stream);
       setStreamLocal(stream);
 
+      //await addTrackAddon(streamLocal);
+
+      if (localVideoRef.current) {
+        localVideoRef.current.srcObject = streamLocal;
+      }
+    } catch (error) {
+      console.error("Error accessing local media:", error);
+    }
+  };
+  const startScreenStream = async () => {
+    try {
+      const stream: MediaStream = await navigator.mediaDevices.getDisplayMedia({
+        video: videoPremission,
+        audio: audioPremission,
+      });
+      setLocalStreamState(stream);
+      addTrackAddon(stream);
       //await addTrackAddon(streamLocal);
 
       if (localVideoRef.current) {
@@ -493,6 +533,10 @@ const page = () => {
       handleTrackEvent(event, clientID);
     };
   };
+  const handleFormSubmit = (event: any) => {
+    event.preventDefault();
+    handleSendChat(message);
+  };
 
   useEffect(() => {
     var clientList = getClients();
@@ -518,96 +562,100 @@ const page = () => {
   return (
     <>
       <Navbar />
-      <div
-        id="mainLayoutDiv"
-        style={{
-          display: "flex",
-          flexDirection: "row",
-          justifyContent: "center",
-          alignItems: "center",
-        }}
-      >
-        <div
-          id="mainLayoutDivSub1"
-          style={{
-            width: "20%",
-            margin: "1%",
-            marginLeft: ".5%",
-            height: "85vh",
-            marginTop: "3.5%",
-            backgroundColor: "hsla(0, 0%, 0%, 0.200)",
-            opacity: 0.7,
-            padding: "15px",
-          }}
-        >
-          <div style={{ width: "100%", height: "40%" }}>
+      <div id="mainLayoutDiv">
+        <div id="mainLayoutDivSub1">
+          <div className="mainLayoutDivSub1VideoBox">
             {localaStreamState ? (
               <ReactPlayer
+                className="mainLayoutDivSub1VideoBoxVideo"
                 url={localaStreamState}
                 playing
                 playsInline
                 muted
-                style={{
-                  width: "95%",
-                  height: "90%",
-
-                  display: "inline",
-                }}
               ></ReactPlayer>
             ) : (
               <div
-                style={{
-                  width: "95%",
-                  margin: "2.5%",
-                  height: "90%",
-                  backgroundColor: "white",
-                }}
+              
               ></div>
             )}
-            <button onClick={() => manageStreamControls("video")}>Video</button>
-            <button onClick={() => manageStreamControls("audio")}>Audio</button>
-          </div>
-          <div style={{ height: "60%", width: "100%" }}>
-            <div
-              style={{
-                height: "75%",
-                width: "100%",
-                overflowY: "hidden",
-                color: "beige",
-                marginTop: "10%",
-              }}
-            >
-              {messageList.map((message) => message)}
-            </div>
-            <div style={{ height: "20%", width: "100%" }}>
-              <input
-                type="text"
-                onChange={(event) => {
-                  setMessage(event.target.value);
-                }}
+            <div className="mainLayoutDivSub1VideoBoxControls">
+              {videoPremission ? (
+                <Video
+                  style={{ color: "white", scale: "1.5" }}
+                  onClick={() => {
+                    manageStreamControls("video");
+                  }}
+                />
+              ) : (
+                <VideoOff
+                  style={{ color: "white", scale: "1.5" }}
+                  onClick={() => {
+                    manageStreamControls("video");
+                  }}
+                />
+              )}
+              {audioPremission ? (
+                <Mic
+                  className="mainLayoutDivSub1VideoBoxControlsMic"
+                  style={{ color: "white", scale: "1.5" }}
+                  onClick={() => {
+                    manageStreamControls("audio");
+                  }}
+                />
+              ) : (
+                <MicOff
+                  className="mainLayoutDivSub1VideoBoxControlsMic"
+                  style={{ color: "white", scale: "1.5" }}
+                  onClick={() => {
+                    manageStreamControls("audio");
+                  }}
+                />
+              )}
+
+              <ScreenShare
+                className="mainLayoutDivSub1VideoBoxControlsScreenShare"
+                style={{ color: "white", scale: "1.5", margin: "15px" }}
+                onClick={() => startScreenStream()}
               />
-              <button onClick={() => handleSendChat(message)}>Send</button>
             </div>
           </div>
+          {isMobileOrTablet ? (
+            <div></div>
+          ) : (
+            <div className="chatSystem">
+              <div className="chatDisplayBox">
+                <div className="chatMessages">
+                  {messageList.map((message) => message)}
+                </div>
+              </div>
+              <form
+                className="chatSubmitBoxForm"
+                onSubmit={(event) => handleFormSubmit(event)}
+              >
+                <input
+                  type="text"
+                  onChange={(event) => {
+                    setMessage(event.target.value);
+                  }}
+                  value={message}
+                />
+                <button onClick={() => handleSendChat(message)}>Send</button>
+              </form>
+            </div>
+          )}
         </div>
-        <div
-          id="mainLayoutDivSub2"
-          style={{
-            textDecoration: "none",
-            width: "77%",
-            margin: "1%",
-            marginRight: ".5%",
-            height: "85vh",
-            marginTop: "3.5%",
-            backgroundColor: "hsla(0, 0%, 0%, 0.200)",
-            opacity: 0.7,
-            display: "flex",
-            flexDirection: "row",
-            flexWrap: "wrap",
-            paddingTop: "30px",
-            paddingBottom: "20px",
-          }}
-        >
+        <div id="mainLayoutDivSub2">
+          {remoteStream.length === 0
+            ? userAction == "joinRoom" && (
+                <button
+                  className="mainLayoutDivSub2JoinBtn"
+                  onClick={() => handleStartVideoButton()}
+                  style={{}}
+                >
+                  Click To Join
+                </button>
+              )
+            : null}
           {remoteStream.map((stream: MediaStream) => (
             <ReactPlayer
               style={{

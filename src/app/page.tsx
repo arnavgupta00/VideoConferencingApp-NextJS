@@ -1,21 +1,21 @@
 "use client"
 import Link from 'next/link';
 import Navbar from "@/components/navbar/navbar";
-import "./page.css"
+import "@/app/page.css"
 export default function Home() {
   return (
     <main >
 
       <Navbar />
-      <div id='mainLayoutDiv' style={{ display: 'flex', flexDirection: 'row' }}>
-        <div id='mainLayoutDivSub1' style={{ width: '20%', margin: "1%", marginLeft: ".5%", height: "85vh", marginTop: "3.5%", backgroundColor: "black", opacity: 0.3 }}>
+      <div id='mainLayoutDiv'>
+        <div id='mainLayoutDivSub1' >
 
         </div>
-        <div id='mainLayoutDivSub2' style={{ textDecoration: "none", width: '77%', margin: "1%", marginRight: ".5%", height: "85vh", marginTop: "3.5%", backgroundColor: "black", opacity: 0.3 }}>
-          <Link href="/roomCreate" className='createRoom' style={{ textDecoration: "none", color: "black" }}>
+        <div id='mainLayoutDivSub2' >
+          <Link href="/roomCreate" className='createRoom' style={{ textDecoration: "none", color: "black" , scale:0.75 }}>
             <p>Create Room</p>
           </Link>
-          <Link href="/roomJoin" className='joinRoom' style={{ textDecoration: "none", color: "black" }}>
+          <Link href="/roomJoin" className='joinRoom' style={{ textDecoration: "none", color: "black", scale:0.75 }}>
             <p>Join Room</p>
           </Link>
 

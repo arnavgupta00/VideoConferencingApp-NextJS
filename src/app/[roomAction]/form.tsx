@@ -1,6 +1,6 @@
 "use client";
 import React, { ChangeEvent } from 'react';
-import "./page.css";
+import "@/app/[roomAction]/page.css";
 import rn from 'random-number';
 import { setRoomNoVar, setFormData, formData } from "../../components/variableSet/variableSet";
 import {handleOnJoin ,handleOnCreate} from "@/components/functions/function"
@@ -30,9 +30,9 @@ const Form: React.FC<FormProps> = ({ actionCreate }) => {
   const numberRoom = rn(options); //rn(options)
   setFormData({ ...formData, userRoomNumber: numberRoom })
   return (
-    <div>
+    <div className='formBox'>
       {actionCreate === "true" ? (
-        <div style={{ display: "flex", flexDirection: "column" }}>
+        <div className='formBox' >
           <input
             className='signinput'
             type='text'
@@ -61,7 +61,7 @@ const Form: React.FC<FormProps> = ({ actionCreate }) => {
           <Link href={"/callRoom"}><input className='signSubmit' type="submit" value="Create Room" onClick={handleOnCreate} /></Link>
         </div>
       ) : (
-        <div style={{ display: "flex", flexDirection: "column" }} >
+        <div className='formBox'>
           <input
             className='signinput'
             type='text'
