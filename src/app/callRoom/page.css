@@ -28,7 +28,7 @@
   height: 90%;
   display: inline;
 }
-.mainLayoutDivSub1VideoBoxControls{
+.mainLayoutDivSub1VideoBoxControls {
   display: flex;
   flex-direction: row;
   justify-content: flex-start;
@@ -178,11 +178,10 @@
     height: 100%;
     gap: 10px;
     scale: 1.5;
-    justify-content:center;
+    justify-content: center;
     margin-left: 20%;
   }
-  .mainLayoutDivSub1VideoBoxControlsScreenShare{
+  .mainLayoutDivSub1VideoBoxControlsScreenShare {
     visibility: collapse;
   }
-  
 }

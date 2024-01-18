@@ -30,6 +30,7 @@ import {
   getClients,
   addPeerConnection,
   getPeerConnections,
+  removePeerConnection,
 } from "@/components/variableSet/variableSet";
 
 import { RemoteMedia } from "@/components/video/remoteMedia";
@@ -413,6 +414,10 @@ const page = () => {
 
     clientStreamMap.set(clientID, mediaStream);
 
+    loadTrack();
+  };
+
+  const loadTrack = () => {
     setRemoteStream([]);
 
     Array.from(clientStreamMap.values()).map((stream: MediaStream) =>
@@ -455,16 +460,28 @@ const page = () => {
       console.error("Error accessing local media:", error);
     }
   };
+  const removeAllTracksFromStream = (stream: MediaStream) => {
+    stream.getTracks().forEach((track) => {
+      stream.removeTrack(track);
+    });
+  };
   const startScreenStream = async () => {
     try {
       const stream: MediaStream = await navigator.mediaDevices.getDisplayMedia({
         video: videoPremission,
         audio: audioPremission,
       });
+      stream.getVideoTracks()[0].onended = async() => {
+        console.log("TRIGGERED")
+        console.log(streamLocal.getVideoTracks())
+        await startLocalStream();
+        removeAllTracksFromStream(stream)
+        addTrackAddon(streamLocal);
+      }
       setLocalStreamState(stream);
       addTrackAddon(stream);
       //await addTrackAddon(streamLocal);
-
+      
       if (localVideoRef.current) {
         localVideoRef.current.srcObject = streamLocal;
       }
@@ -503,6 +520,14 @@ const page = () => {
     pc.oniceconnectionstatechange = () => {
       console.log("ICE Connection State:", pc.iceConnectionState);
       if (pc.iceConnectionState === "connected") {
+      } else if (pc.iceConnectionState === "disconnected") {
+        console.log("DISCONNECTED");
+
+        removePeerConnection(clientID);
+
+        clientStreamMap.delete(clientID);
+
+        loadTrack();
       }
     };
   };
@@ -574,9 +599,7 @@ const page = () => {
                 muted
               ></ReactPlayer>
             ) : (
-              <div
-              
-              ></div>
+              <div></div>
             )}
             <div className="mainLayoutDivSub1VideoBoxControls">
               {videoPremission ? (
