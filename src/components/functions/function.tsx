@@ -15,7 +15,9 @@ import "dotenv/config";
 export var socket: WebSocket;
 
 export var socketReadyState: boolean = false;
-
+export const removeSocket = () => {
+  socket?.close();
+}
 export const setSocket = () => {
   
   socket = new WebSocket("wss://videochatsignallingserverrender.onrender.com/");

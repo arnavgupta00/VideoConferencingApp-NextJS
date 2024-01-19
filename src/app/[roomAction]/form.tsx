@@ -77,11 +77,7 @@ const Form: React.FC<FormProps> = ({ actionCreate }) => {
             value={numberRoom}
             onChange={signSearchHandle}
           />
-          {socketForm?.readyState === WebSocket.OPEN ? (
-            <p>Connection With Server Sucessfull</p>
-          ) : (
-            <p>Wait for Connection With Server</p>
-          )}
+         
           {socketForm !== null ? (
             <Link href={"/callRoom"}>
               <input
@@ -122,11 +118,7 @@ const Form: React.FC<FormProps> = ({ actionCreate }) => {
             placeholder="Enter Room Number"
             onChange={signSearchHandle}
           />
-          {socketForm?.readyState === WebSocket.OPEN ? (
-            <p>Connection With Server Sucessfull</p>
-          ) : (
-            <p>Wait for Connection With Server</p>
-          )}
+          
           {socketForm !== null ? (
             <Link href={"/callRoom"}>
               <input

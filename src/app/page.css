@@ -23,6 +23,7 @@
   justify-content: space-between;
   align-items: center;
   flex-direction: column;
+  border-radius: 15px;
 }
 
 #mainLayoutDivSub2 {
@@ -38,11 +39,13 @@
   flex-direction: row;
   justify-content: center;
   align-items: center;
+  gap: 2%;
   padding-top: 15px;
   padding-bottom: 15px;
   font-size: 35px;
   font-family: "Montserrat", sans-serif;
   font-weight: bolder;
+  border-radius: 15px;
 }
 
 .createRoom {

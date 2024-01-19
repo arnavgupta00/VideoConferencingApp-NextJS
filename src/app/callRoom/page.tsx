@@ -3,7 +3,7 @@ import "@/app/page.css";
 import "@/app/callRoom/page.css";
 import Navbar from "@/components/navbar/navbar";
 import { useRef, useEffect, useState } from "react";
-import { socket, userAction } from "@/components/functions/function";
+import { socket, userAction , removeSocket } from "@/components/functions/function";
 import ReactPlayer from "react-player";
 import useMediaQuery from "@mui/material/useMediaQuery";
 
@@ -618,7 +618,7 @@ const page = () => {
       <Navbar />
       <div id="mainLayoutDiv">
         <div id="mainLayoutDivSub1">
-          <div className="mainLayoutDivSub1VideoBox">
+          <div className="mainLayoutDivSub1VideoBox" style={{borderRadius:"15px"}}>
             {localaStreamState ? (
               <ReactPlayer
                 className="mainLayoutDivSub1VideoBoxVideo"
@@ -626,6 +626,7 @@ const page = () => {
                 playing
                 playsInline
                 muted
+                borderRadius="15%"
               ></ReactPlayer>
             ) : (
               <div></div>
@@ -722,8 +723,8 @@ const page = () => {
           {remoteStream.map((stream: MediaStream) => (
             <ReactPlayer
               style={{
-                maxWidth: `${width - 3}%`,
-                maxHeight: `${width - 3}%`,
+                maxWidth: `${width - 5}%`,
+                minHeight: `${width - 3}%`,
                 flexGrow: "1",
                 flexShrink: "1",
                 marginBottom: "1%",
