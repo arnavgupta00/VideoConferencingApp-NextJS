@@ -1,6 +1,5 @@
 "use client";
 import "@/app/page.css";
-import "@/app/[roomAction]/page.css";
 import "@/app/callRoom/page.css";
 import Navbar from "@/components/navbar/navbar";
 import { useRef, useEffect, useState } from "react";
@@ -15,6 +14,7 @@ import {
   MicOff,
   ScreenShare,
   ScreenShareIcon,
+  Send,
 } from "lucide-react";
 
 import {
@@ -294,6 +294,7 @@ const page = () => {
     setMessageList((prevList) => [...prevList, messageComp]);
   };
   const handleSendChat = (message: string) => {
+    if(message==="") return;
     socket.send(
       JSON.stringify({
         type: "chat",
@@ -686,7 +687,7 @@ const page = () => {
                   }}
                   value={message}
                 />
-                <button onClick={() => handleSendChat(message)}>Send</button>
+                <button onClick={() => handleSendChat(message)}><Send/></button>
               </form>
             </div>
           )}

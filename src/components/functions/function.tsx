@@ -1,5 +1,7 @@
 "use client";
 
+
+import { use } from "react";
 import {
   setRoomNoVar,
   setFormData,
@@ -61,5 +63,15 @@ const startingStep = async (type: string, socket: WebSocket) => {
     roomId: "room" + roomNoVar,
     userId: formData.userName + "_" + formData.userEmail,
   });
-  socket.send(sendString);
+  if (socket.readyState === WebSocket.OPEN) {
+    socket.send(sendString);
+  } else {
+    if(type === "createRoom"){
+      window.location.replace('/roomCreate');
+    }else if(type === "joinRoom"){
+      window.location.replace('/roomJoin');
+    }  
+    
+  }
+  
 };

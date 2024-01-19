@@ -25,7 +25,7 @@ const Form: React.FC<FormProps> = ({ actionCreate }) => {
     const { name, value } = event.target;
     setFormData({ ...formData, [name]: value });
   };
-  const [socketForm, setSocketForm] = useState<any>(null);
+  const [socketForm, setSocketForm] = useState<WebSocket>();
 
   const options = {
     min: 0,
@@ -77,10 +77,10 @@ const Form: React.FC<FormProps> = ({ actionCreate }) => {
             value={numberRoom}
             onChange={signSearchHandle}
           />
-          {socketForm === null ? (
-            <p>Wait for Connection With Server</p>
-          ) : (
+          {socketForm?.readyState === WebSocket.OPEN ? (
             <p>Connection With Server Sucessfull</p>
+          ) : (
+            <p>Wait for Connection With Server</p>
           )}
           {socketForm !== null ? (
             <Link href={"/callRoom"}>
@@ -90,7 +90,7 @@ const Form: React.FC<FormProps> = ({ actionCreate }) => {
                 value="Create Room"
                 onClick={() => {
                   handleOnCreate(
-                    socketForm !== null ? socketForm : setSocket()
+                    socketForm ? socketForm : setSocket()
                   );
                 }}
               />
@@ -122,10 +122,10 @@ const Form: React.FC<FormProps> = ({ actionCreate }) => {
             placeholder="Enter Room Number"
             onChange={signSearchHandle}
           />
-          {socketForm === null ? (
-            <p>Wait for Connection With Server</p>
-          ) : (
+          {socketForm?.readyState === WebSocket.OPEN ? (
             <p>Connection With Server Sucessfull</p>
+          ) : (
+            <p>Wait for Connection With Server</p>
           )}
           {socketForm !== null ? (
             <Link href={"/callRoom"}>
@@ -135,7 +135,7 @@ const Form: React.FC<FormProps> = ({ actionCreate }) => {
                 value="Join Room"
                 onClick={() => {
                   handleOnJoin(
-                    socketForm !== null ? socketForm : setSocket()
+                    socketForm ? socketForm : setSocket()
                   );
                 }}
               />

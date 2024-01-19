@@ -1,22 +1,20 @@
+:root{
+  --frontBox1 : #1d1d1d;
+  --frontBox2 : #1d1d1d;
+}
+
 html {
-  background: linear-gradient(
-    to right,
-    #040818,
-    #061120,
-    #081928,
-    #0a2130,
-    #0c2937
-  );
+  background: black;;
 }
 /*SCROLL BAR*/
 ::-webkit-scrollbar {
   width: 0.5rem;
-  background-color: #0c2937;
+  background-color: black;
   mix-blend-mode: multiply;
 }
 
 ::-webkit-scrollbar-thumb {
-  background: rgba(255, 255, 255, 0.5);
+  background: var(--frontBox1);
   border: 2.5px solid transparent;
   border-radius: 10px;
   background-clip: content-box;
