@@ -114,34 +114,38 @@ const page = () => {
     }
   };
   const handleNegotiationNeededAnswer = async (data: any) => {
-    console.log(`NEGOTIATION OFFER BY ${data.senderID} RECIEVED`);
-    const pcList = getPeerConnections();
-    const pc = pcList[data.senderID];
+    try {
+      console.log(`NEGOTIATION OFFER BY ${data.senderID} RECIEVED`);
+      const pcList = getPeerConnections();
+      const pc = pcList[data.senderID];
 
-    if (!pc) return; // Return
+      if (!pc) return; // Return
 
-    const remoteDescription = data.payloadOffer
-      ? new RTCSessionDescription(data.payloadOffer)
-      : null;
-    if (!remoteDescription) return; // Return
+      const remoteDescription = data.payloadOffer
+        ? new RTCSessionDescription(data.payloadOffer)
+        : null;
+      if (!remoteDescription) return; // Return
 
-    await pc.setRemoteDescription(remoteDescription);
-    const answer = await pc.createAnswer();
+      await pc.setRemoteDescription(remoteDescription);
+      const answer = await pc.createAnswer();
 
-    await pc.setLocalDescription(answer);
+      await pc.setLocalDescription(answer);
 
-    socket.send(
-      JSON.stringify({
-        type: "answer",
-        answer: answer,
-        target: data.senderID,
-        negotiation: true,
-      })
-    );
+      socket.send(
+        JSON.stringify({
+          type: "answer",
+          answer: answer,
+          target: data.senderID,
+          negotiation: true,
+        })
+      );
 
-    console.log(`ANSWER SENT TO ${data.senderID}`, answer);
-    console.log("PEER CONNECTION NEGO", pc);
-    addPeerConnection(data.senderID, pc);
+      console.log(`ANSWER SENT TO ${data.senderID}`, answer);
+      console.log("PEER CONNECTION NEGO", pc);
+      addPeerConnection(data.senderID, pc);
+    } catch (error) {
+      console.log("error", error);
+    }
   };
 
   const sendAnswer = async (data: any) => {
@@ -240,33 +244,39 @@ const page = () => {
   };
 
   const handleRecieveAnswer = async (data: any, client: string) => {
-    if (data.answer) {
-      const pcList = getPeerConnections();
-      const pc = pcList[data.senderID];
-      console.log(
-        `PROCEEDED ANSWER FROM ${client} ${data.senderID}`,
-        pcList[data.senderID]
-      );
-
-      if (pcList[data.senderID]) {
-        console.log(`PROCEEDED FURTHER ANSWER FROM ${client} ${data.senderID}`);
-
-        await pcList[data.senderID].setRemoteDescription(
-          new RTCSessionDescription(data.answer)
-        ); //data.answer is the answer recieved
-
-        addPeerConnection(data.senderID, pcList[data.senderID]);
-
-        console.log("remote description set", data.answer);
+    try {
+      if (data.answer) {
+        const pcList = getPeerConnections();
+        const pc = pcList[data.senderID];
         console.log(
-          "After setting remote description:",
-          pcList[data.senderID].iceConnectionState,
-          pcList[data.senderID].iceGatheringState
+          `PROCEEDED ANSWER FROM ${client} ${data.senderID}`,
+          pcList[data.senderID]
         );
 
-        addPeerConnection(data.senderID, pcList[data.senderID]);
-        console.log("pc", pcList[data.senderID]);
+        if (pcList[data.senderID]) {
+          console.log(
+            `PROCEEDED FURTHER ANSWER FROM ${client} ${data.senderID}`
+          );
+
+          await pcList[data.senderID].setRemoteDescription(
+            new RTCSessionDescription(data.answer)
+          ); //data.answer is the answer recieved
+
+          addPeerConnection(data.senderID, pcList[data.senderID]);
+
+          console.log("remote description set", data.answer);
+          console.log(
+            "After setting remote description:",
+            pcList[data.senderID].iceConnectionState,
+            pcList[data.senderID].iceGatheringState
+          );
+
+          addPeerConnection(data.senderID, pcList[data.senderID]);
+          console.log("pc", pcList[data.senderID]);
+        }
       }
+    } catch (error) {
+      console.log("error", error);
     }
   };
 
@@ -471,17 +481,17 @@ const page = () => {
         video: videoPremission,
         audio: audioPremission,
       });
-      stream.getVideoTracks()[0].onended = async() => {
-        console.log("TRIGGERED")
-        console.log(streamLocal.getVideoTracks())
+      stream.getVideoTracks()[0].onended = async () => {
+        console.log("TRIGGERED");
+        console.log(streamLocal.getVideoTracks());
         await startLocalStream();
-        removeAllTracksFromStream(stream)
+        removeAllTracksFromStream(stream);
         addTrackAddon(streamLocal);
-      }
+      };
       setLocalStreamState(stream);
       addTrackAddon(stream);
       //await addTrackAddon(streamLocal);
-      
+
       if (localVideoRef.current) {
         localVideoRef.current.srcObject = streamLocal;
       }
@@ -581,6 +591,20 @@ const page = () => {
         localVideoRef.current?.srcObject as MediaStream
       )?.getTracks();
       tracks && tracks.forEach((track: MediaStreamTrack) => track.stop());
+
+      var clientList = getClients();
+      const clientListSet = new Set(clientList);
+      clientList = Array.from(clientListSet);
+      console.log("CLEANUP FIRED");
+      clientList.forEach((client) => {
+        const pcList = getPeerConnections();
+        const pc = pcList[client];
+        if (pc) {
+          pc.close();
+          console.log("CLEANUP FIRED", client);
+          removePeerConnection(client);
+        }
+      });
     };
   }, []);
 
