@@ -15,6 +15,8 @@ import {
   ScreenShare,
   ScreenShareIcon,
   Send,
+  MessageSquareMore,
+  X,
 } from "lucide-react";
 
 import {
@@ -50,6 +52,8 @@ const page = () => {
   const [remoteStream, setRemoteStream] = useState<MediaStream[]>([]);
 
   const isMobileOrTablet = useMediaQuery("(max-width: 767px)");
+
+  const [chatBoxMobile, setChatBoxMobile] = useState<boolean>(false);
 
   const [videoPremission, setVideoPremission] = useState<boolean>(true);
   const [audioPremission, setAudioPremission] = useState<boolean>(true);
@@ -294,7 +298,7 @@ const page = () => {
     setMessageList((prevList) => [...prevList, messageComp]);
   };
   const handleSendChat = (message: string) => {
-    if(message==="") return;
+    if (message === "") return;
     socket.send(
       JSON.stringify({
         type: "chat",
@@ -660,11 +664,20 @@ const page = () => {
                 />
               )}
 
-              <ScreenShare
-                className="mainLayoutDivSub1VideoBoxControlsScreenShare"
-                style={{ color: "white", scale: "1.5", margin: "15px" }}
-                onClick={() => startScreenStream()}
-              />
+              {isMobileOrTablet ? null : (
+                <ScreenShare
+                  className="mainLayoutDivSub1VideoBoxControlsScreenShare"
+                  style={{ color: "white", scale: "1.5", margin: "15px" }}
+                  onClick={() => startScreenStream()}
+                />
+              )}
+              {isMobileOrTablet ? (
+                <MessageSquareMore
+                  className="mainLayoutDivSub1VideoBoxControlsMessageButtonMobile"
+                  style={{ color: "white", scale: "1.5", margin: "15px" }}
+                  onClick={() => setChatBoxMobile(!chatBoxMobile)}
+                />
+              ) : null}
             </div>
           </div>
           {isMobileOrTablet ? (
@@ -687,7 +700,9 @@ const page = () => {
                   }}
                   value={message}
                 />
-                <button onClick={() => handleSendChat(message)}><Send/></button>
+                <button onClick={() => handleSendChat(message)}>
+                  <Send />
+                </button>
               </form>
             </div>
           )}
@@ -720,6 +735,31 @@ const page = () => {
             />
           ))}
         </div>
+        {chatBoxMobile ? (
+          <div className="chatSystem" style={{position:"absolute", width:"70vw",height:"500px" ,opacity:0.7,backgroundColor:"black", padding:"15px", borderRadius:"15px"}}>
+            <X style={{color:"white" , marginLeft:"85%" , position:"absolute"}} onClick={()=> setChatBoxMobile(!chatBoxMobile)} />
+            <div className="chatDisplayBox">
+              <div className="chatMessages">
+                {messageList.map((message) => message)}
+              </div>
+            </div>
+            <form
+              className="chatSubmitBoxForm"
+              onSubmit={(event) => handleFormSubmit(event)}
+            >
+              <input
+                type="text"
+                onChange={(event) => {
+                  setMessage(event.target.value);
+                }}
+                value={message}
+              />
+              <button onClick={() => handleSendChat(message)}>
+                <Send />
+              </button>
+            </form>
+          </div>
+        ) : null}
       </div>
     </>
   );
