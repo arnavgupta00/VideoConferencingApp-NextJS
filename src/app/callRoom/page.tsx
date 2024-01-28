@@ -35,7 +35,6 @@ import {
   removePeerConnection,
 } from "@/components/variableSet/variableSet";
 
-import { RemoteMedia } from "@/components/video/remoteMedia";
 
 const page = () => {
   const localVideoRef = useRef<HTMLVideoElement>(null);
