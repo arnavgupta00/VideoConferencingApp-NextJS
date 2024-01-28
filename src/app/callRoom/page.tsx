@@ -722,8 +722,8 @@ const page = () => {
           {remoteStream.map((stream: MediaStream) => (
             <ReactPlayer
               style={{
-                maxWidth: `${width - 5}%`,
-                minHeight: `${width - 3}%`,
+                maxWidth: `${width - 3}%`,
+                maxHeight: `${width - 6}%`,
                 flexGrow: "1",
                 flexShrink: "1",
                 marginBottom: "1%",

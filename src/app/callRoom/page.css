@@ -4,7 +4,9 @@
   justify-content: center;
   align-items: center;
 }
-
+#mainLayoutDivSub2{
+  flex-wrap: wrap;
+}
 
 .mainLayoutDivSub1VideoBox {
   width: 100%;
