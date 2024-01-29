@@ -25,6 +25,7 @@ import {
   Send,
   MessageSquareMore,
   X,
+  Unplug,
 } from "lucide-react";
 
 import {
@@ -584,6 +585,33 @@ const page = () => {
     handleSendChat(message);
   };
 
+  const handleDisconnect = () => {
+    const tracks = (
+      localVideoRef.current?.srcObject as MediaStream
+    )?.getTracks();
+    tracks && tracks.forEach((track: MediaStreamTrack) => track.stop());
+
+    var clientList = getClients();
+    const clientListSet = new Set(clientList);
+    clientList = Array.from(clientListSet);
+    console.log("CLEANUP FIRED");
+    if (socket.readyState === WebSocket.OPEN) {
+      socket.close();
+      console.log("CLOSED SOCKKKKKKKET");
+    }
+    clientList.forEach((client) => {
+      const pcList = getPeerConnections();
+      const pc = pcList[client];
+      if (pc) {
+        pc.close();
+        console.log("CLEANUP FIRED", client);
+        removePeerConnection(client);
+      }
+    });
+    window.location.replace("/");
+    
+  }
+
   const waitSocketConnection = () => {
     return new Promise<void>((resolve, reject) => {
       const maxNumberOfAttempts = 10;
@@ -618,15 +646,17 @@ const page = () => {
 
   useEffect(() => {
     const fetchData = async () => {
-      if (!socket || socket.readyState === WebSocket.CLOSING || socket.readyState === WebSocket.CLOSED) {
-        console.log("FIREDDDDDDDDD")
+      if (
+        !socket ||
+        socket.readyState === WebSocket.CLOSING ||
+        socket.readyState === WebSocket.CLOSED
+      ) {
+        console.log("FIREDDDDDDDDD");
         await waitSocketConnection();
       }
     };
 
     fetchData();
-
-    
 
     return () => {
       const tracks = (
@@ -638,9 +668,9 @@ const page = () => {
       const clientListSet = new Set(clientList);
       clientList = Array.from(clientListSet);
       console.log("CLEANUP FIRED");
-      if(socket.readyState === WebSocket.OPEN){
+      if (socket.readyState === WebSocket.OPEN) {
         socket.close();
-        console.log("CLOSED SOCKKKKKKKET")
+        console.log("CLOSED SOCKKKKKKKET");
       }
       clientList.forEach((client) => {
         const pcList = getPeerConnections();
@@ -670,7 +700,6 @@ const page = () => {
                 playing
                 playsInline
                 muted
-               
               ></ReactPlayer>
             ) : (
               <div></div>
@@ -678,14 +707,14 @@ const page = () => {
             <div className="mainLayoutDivSub1VideoBoxControls">
               {videoPremission ? (
                 <Video
-                  style={{ color: "white", scale: "1.5" }}
+                  style={{ color: "white", scale: "2.5" }}
                   onClick={() => {
                     manageStreamControls("video");
                   }}
                 />
               ) : (
                 <VideoOff
-                  style={{ color: "white", scale: "1.5" }}
+                  style={{ color: "white", scale: "2.5" }}
                   onClick={() => {
                     manageStreamControls("video");
                   }}
@@ -694,7 +723,7 @@ const page = () => {
               {audioPremission ? (
                 <Mic
                   className="mainLayoutDivSub1VideoBoxControlsMic"
-                  style={{ color: "white", scale: "1.5" }}
+                  style={{ color: "white", scale: "2.5" }}
                   onClick={() => {
                     manageStreamControls("audio");
                   }}
@@ -702,7 +731,7 @@ const page = () => {
               ) : (
                 <MicOff
                   className="mainLayoutDivSub1VideoBoxControlsMic"
-                  style={{ color: "white", scale: "1.5" }}
+                  style={{ color: "white", scale: "2.5" }}
                   onClick={() => {
                     manageStreamControls("audio");
                   }}
@@ -712,17 +741,22 @@ const page = () => {
               {isMobileOrTablet ? null : (
                 <ScreenShare
                   className="mainLayoutDivSub1VideoBoxControlsScreenShare"
-                  style={{ color: "white", scale: "1.5", margin: "15px" }}
+                  style={{ color: "white", scale: "2.5", margin: "15px" }}
                   onClick={() => startScreenStream()}
                 />
               )}
               {isMobileOrTablet ? (
                 <MessageSquareMore
                   className="mainLayoutDivSub1VideoBoxControlsMessageButtonMobile"
-                  style={{ color: "white", scale: "1.5", margin: "15px" }}
+                  style={{ color: "white", scale: "2.5", margin: "15px" }}
                   onClick={() => setChatBoxMobile(!chatBoxMobile)}
                 />
               ) : null}
+              <Unplug
+                className="mainLayoutDivSub1VideoBoxControlsDisconnect"
+                style={{ color: "white", scale: "2.5" }}
+                onClick={() => handleDisconnect()}
+              />
             </div>
           </div>
           {isMobileOrTablet ? (
@@ -772,7 +806,6 @@ const page = () => {
                 flexGrow: "1",
                 flexShrink: "1",
                 marginBottom: "1%",
-                
               }}
               key={stream.id}
               playing

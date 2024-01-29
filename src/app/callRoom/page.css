@@ -157,9 +157,13 @@
     gap: 10px;
     scale: 1.5;
     justify-content: center;
-    margin-left: 20%;
+    margin-left: 10%;
+    margin-right: 25px;
   }
   .mainLayoutDivSub1VideoBoxControlsScreenShare {
     visibility: collapse;
+  }
+  .mainLayoutDivSub1VideoBoxControlsMic{
+    margin-left: 10px;
   }
 }
