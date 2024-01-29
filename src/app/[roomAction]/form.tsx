@@ -25,7 +25,6 @@ const Form: React.FC<FormProps> = ({ actionCreate }) => {
     const { name, value } = event.target;
     setFormData({ ...formData, [name]: value });
   };
-  const [socketForm, setSocketForm] = useState<WebSocket>();
 
   const options = {
     min: 0,
@@ -33,23 +32,10 @@ const Form: React.FC<FormProps> = ({ actionCreate }) => {
     integer: true,
   };
 
-  const numberRoom = rn(options); //rn(options)
+  const numberRoom = rn(options);
   setFormData({ ...formData, userRoomNumber: numberRoom });
 
-  useEffect(() => {
-    console.log(
-      "CALLED SETSOCKET -----------------------------------",
-      socketForm
-    );
-
-    setSocketForm(setSocket()); /////////////////////////////////
-
-    console.log(
-      "CALLED SETSOCKET 224 -----------------------------------",
-      socketForm
-    );
-
-  }, []);
+  useEffect(() => {}, []);
 
   return (
     <div className="formBox">
@@ -77,23 +63,17 @@ const Form: React.FC<FormProps> = ({ actionCreate }) => {
             value={numberRoom}
             onChange={signSearchHandle}
           />
-         
-          {socketForm !== null ? (
-            <Link href={"/callRoom"}>
-              <input
-                className="signSubmit"
-                type="submit"
-                value="Create Room"
-                onClick={() => {
-                  handleOnCreate(
-                    socketForm ? socketForm : setSocket()
-                  );
-                }}
-              />
-            </Link>
-          ) : (
-            <p>Wait</p>
-          )}
+
+          <Link href={"/callRoom"}>
+            <input
+              className="signSubmit"
+              type="submit"
+              value="Create Room"
+              onClick={() => {
+                handleOnCreate();
+              }}
+            />
+          </Link>
         </div>
       ) : (
         <div className="formBox">
@@ -118,23 +98,17 @@ const Form: React.FC<FormProps> = ({ actionCreate }) => {
             placeholder="Enter Room Number"
             onChange={signSearchHandle}
           />
-          
-          {socketForm !== null ? (
-            <Link href={"/callRoom"}>
-              <input
-                className="signSubmit"
-                type="submit"
-                value="Join Room"
-                onClick={() => {
-                  handleOnJoin(
-                    socketForm ? socketForm : setSocket()
-                  );
-                }}
-              />
-            </Link>
-          ) : (
-            <p>Wait</p>
-          )}
+
+          <Link href={"/callRoom"}>
+            <input
+              className="signSubmit"
+              type="submit"
+              value="Join Room"
+              onClick={() => {
+                handleOnJoin();
+              }}
+            />
+          </Link>
         </div>
       )}
     </div>

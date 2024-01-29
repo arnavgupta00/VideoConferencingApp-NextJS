@@ -45,21 +45,22 @@ export const setSocket = () => {
 
 export var userAction = "";
 
-export const handleOnJoin = (socket: WebSocket) => {
+export const handleOnJoin = () => {
   console.log(formData);
   console.log(roomNoVar);
-  startingStep("joinRoom", socket);
+  // startingStep("joinRoom", socket);
   userAction = "joinRoom";
 };
 
-export const handleOnCreate = (socket: WebSocket) => {
+export const handleOnCreate = () => {
   console.log(formData);
   console.log(roomNoVar);
-  startingStep("createRoom", socket);
+  // startingStep("createRoom", socket);
   userAction = "createRoom";
 };
 
-const startingStep = async (type: string, socket: WebSocket) => {
+export const startingStep = async (type: string, socket: WebSocket) => {
+  console.log("startingStepROOOOOOOOMNOOOOOO", roomNoVar);
   const sendString = JSON.stringify({
     type: type,
     roomId: "room" + roomNoVar,

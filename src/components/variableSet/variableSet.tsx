@@ -1,9 +1,9 @@
 "use client"
 
 
-export var  roomNoVar: number = 0;
+export var  roomNoVar: any = 0;
 
-export const setRoomNoVar = (value:number) => {
+export const setRoomNoVar = (value:any) => {
   roomNoVar = value;
 };
 

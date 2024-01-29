@@ -24,8 +24,18 @@
   align-items: center;
   flex-direction: column;
   border-radius: 15px;
+  gap: 15px;
 }
-
+.roomBoxRoom{
+  height: 100px;
+  border-radius: 15px;
+  width: 12vw;
+  text-align: center;
+  padding-top:40px ;
+  background-color: black;
+  color: rgba(255, 255, 255, 0.5)
+  
+}
 #mainLayoutDivSub2 {
   text-decoration: none;
   width: 83%;
@@ -72,29 +82,42 @@
   #mainLayoutDivSub1 {
     width: 90%;
     height: 50%;
-    flex-direction: row;
+    flex-direction: column;
     justify-content: space-between;
     align-self: center;
     max-width: 97vw;
     min-height: 150px;
+    max-height: 500px;
+    overflow-y: scroll;
+  }
+  .roomBoxRoom{
+    width: 85vw;
+    height: 75px;
+    padding-top: 17px;
   }
   .createRoom {
     margin-right: 15px;
     margin-left: 0;
+    height: 60px;
+    width: 60%;
+    font-size: 20px;
   }
   .joinRoom {
     margin-right: 15px;
     margin-left: 0;
+    height: 60px;
+    width: 60%;
+    font-size: 20px;
   }
   #mainLayoutDivSub2 {
     width: 95%;
-    height: 50vh;
+    height: 10vh;
     max-width: 97vw;
     display: flex;
     flex-direction: row;
     justify-content: space-between;
     align-items: center;
-
+    gap: 0;
     font-size: 35px;
     font-family: "Montserrat", sans-serif;
     font-weight: bolder;

@@ -3,7 +3,15 @@ import "@/app/page.css";
 import "@/app/callRoom/page.css";
 import Navbar from "@/components/navbar/navbar";
 import { useRef, useEffect, useState } from "react";
-import { socket, userAction , removeSocket } from "@/components/functions/function";
+import {
+  socket,
+  userAction,
+  removeSocket,
+  setSocket,
+  handleOnCreate,
+  handleOnJoin,
+  startingStep,
+} from "@/components/functions/function";
 import ReactPlayer from "react-player";
 import useMediaQuery from "@mui/material/useMediaQuery";
 
@@ -34,7 +42,6 @@ import {
   getPeerConnections,
   removePeerConnection,
 } from "@/components/variableSet/variableSet";
-
 
 const page = () => {
   const localVideoRef = useRef<HTMLVideoElement>(null);
@@ -577,18 +584,49 @@ const page = () => {
     handleSendChat(message);
   };
 
+  const waitSocketConnection = () => {
+    return new Promise<void>((resolve, reject) => {
+      const maxNumberOfAttempts = 10;
+      const intervalTime = 300;
+      setSocket();
+      let currentAttempt = 0;
+      const interval = setInterval(async () => {
+        if (currentAttempt > maxNumberOfAttempts - 1) {
+          clearInterval(interval);
+          reject();
+          if (userAction === "createRoom") {
+            window.location.replace("/roomCreate");
+          } else if (userAction === "joinRoom") {
+            window.location.replace("/roomJoin");
+          }
+        } else if (socket.readyState === socket.OPEN) {
+          clearInterval(interval);
+          startingStep(userAction, socket); //imp--------##########
+          var clientList = getClients();
+          const clientListSet = new Set(clientList);
+          clientList = Array.from(clientListSet);
+
+          console.log("LIST OF CLIENTS", clientList);
+          await startLocalStream();
+          connectionInitiator(clientList);
+          resolve();
+        }
+        currentAttempt++;
+      }, intervalTime);
+    });
+  };
+
   useEffect(() => {
-    var clientList = getClients();
-    const clientListSet = new Set(clientList);
-    clientList = Array.from(clientListSet);
-
-    console.log("LIST OF CLIENTS", clientList);
-
-    const start = async () => {
-      await startLocalStream();
-      connectionInitiator(clientList);
+    const fetchData = async () => {
+      if (!socket || socket.readyState === WebSocket.CLOSING || socket.readyState === WebSocket.CLOSED) {
+        console.log("FIREDDDDDDDDD")
+        await waitSocketConnection();
+      }
     };
-    start();
+
+    fetchData();
+
+    
 
     return () => {
       const tracks = (
@@ -600,6 +638,10 @@ const page = () => {
       const clientListSet = new Set(clientList);
       clientList = Array.from(clientListSet);
       console.log("CLEANUP FIRED");
+      if(socket.readyState === WebSocket.OPEN){
+        socket.close();
+        console.log("CLOSED SOCKKKKKKKET")
+      }
       clientList.forEach((client) => {
         const pcList = getPeerConnections();
         const pc = pcList[client];
@@ -617,7 +659,10 @@ const page = () => {
       <Navbar />
       <div id="mainLayoutDiv">
         <div id="mainLayoutDivSub1">
-          <div className="mainLayoutDivSub1VideoBox" style={{borderRadius:"15px"}}>
+          <div
+            className="mainLayoutDivSub1VideoBox"
+            style={{ borderRadius: "15px" }}
+          >
             {localaStreamState ? (
               <ReactPlayer
                 className="mainLayoutDivSub1VideoBoxVideo"
@@ -625,7 +670,7 @@ const page = () => {
                 playing
                 playsInline
                 muted
-                borderRadius="15%"
+               
               ></ReactPlayer>
             ) : (
               <div></div>
@@ -727,7 +772,7 @@ const page = () => {
                 flexGrow: "1",
                 flexShrink: "1",
                 marginBottom: "1%",
-                borderRadius: "25%",
+                
               }}
               key={stream.id}
               playing
@@ -736,8 +781,26 @@ const page = () => {
           ))}
         </div>
         {chatBoxMobile ? (
-          <div className="chatSystem" style={{position:"absolute", width:"70vw",height:"500px" ,opacity:0.7,backgroundColor:"black", padding:"15px", borderRadius:"15px"}}>
-            <X style={{color:"white" , marginLeft:"85%" , position:"absolute"}} onClick={()=> setChatBoxMobile(!chatBoxMobile)} />
+          <div
+            className="chatSystem"
+            style={{
+              position: "absolute",
+              width: "70vw",
+              height: "500px",
+              opacity: 0.7,
+              backgroundColor: "black",
+              padding: "15px",
+              borderRadius: "15px",
+            }}
+          >
+            <X
+              style={{
+                color: "white",
+                marginLeft: "85%",
+                position: "absolute",
+              }}
+              onClick={() => setChatBoxMobile(!chatBoxMobile)}
+            />
             <div className="chatDisplayBox">
               <div className="chatMessages">
                 {messageList.map((message) => message)}

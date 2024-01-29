@@ -121,6 +121,7 @@
   #mainLayoutDiv {
     flex-direction: column-reverse;
   }
+
   #mainLayoutDivSub1 {
     width: 90%;
     height: 30%;
@@ -128,6 +129,7 @@
     justify-content: space-between;
     align-self: center;
     max-width: 97vw;
+    overflow-x: hidden;
   }
   .mainLayoutDivSub1VideoBox {
     width: 100%;
