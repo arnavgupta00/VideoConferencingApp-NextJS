@@ -7,6 +7,7 @@ const inter = Inter({ subsets: ["latin"] });
 export const metadata: Metadata = {
   title: "Gragie Video - Connect Anywhere, Anytime",
   description: "Experience seamless video conferencing with Gragie Video. Our app allows you to connect with colleagues and friends effortlessly.",
+  manifest:"/manifest.webmanifest",
 };
 
 export default function RootLayout({
