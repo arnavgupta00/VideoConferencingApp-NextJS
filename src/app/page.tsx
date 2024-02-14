@@ -19,7 +19,7 @@ export default function Home() {
   ];
 
   const handleOnClick = (room: any) => {
-    console.log("CLICKKKKET")
+    console.log("CLICKKKKET");
     var data = {
       userName: room,
       userRoomNumber: room,
@@ -32,19 +32,18 @@ export default function Home() {
     <main>
       <Navbar />
       <div id="mainLayoutDiv">
-        <div id="mainLayoutDivSub1" style={{overflowY:"scroll"}}>
+        <div id="mainLayoutDivSub1" style={{ overflowY: "scroll" }}>
           {roomList.map((room) => (
             <Link
               href={"/callRoom"}
               key={room}
-              style={{ textDecoration: "none", color: "black"}}
+              style={{ textDecoration: "none", color: "black" }}
             >
               <div
                 onClick={() => {
                   handleOnClick(room);
                 }}
                 className="roomBoxRoom"
-                
               >
                 <h3>{room}</h3>
               </div>
@@ -52,20 +51,29 @@ export default function Home() {
           ))}
         </div>
         <div id="mainLayoutDivSub2">
-          <Link
-            href="/roomCreate"
-            className="createRoom"
-            style={{ textDecoration: "none", color: "black", scale: 0.75 }}
-          >
-            <p>Create Room</p>
-          </Link>
-          <Link
-            href="/roomJoin"
-            className="joinRoom"
-            style={{ textDecoration: "none", color: "black", scale: 0.75 }}
-          >
-            <p>Join Room</p>
-          </Link>
+          <div  className="mainLayoutDivSub2Tagline">
+            {"Seamless Meetings, Elevated Experience."
+              .split(" ")
+              .map((word, index) => (
+                <h1 className="mainLayoutDivSub2h1" key={index}>{word}</h1>
+              ))}
+          </div>
+          <div className="mainLayoutDivSub2Buttons" >
+            <Link
+              href="/roomCreate"
+              className="createRoom"
+              style={{ textDecoration: "none", color: "black", scale: 0.75 }}
+            >
+              <p>Create Room</p>
+            </Link>
+            <Link
+              href="/roomJoin"
+              className="joinRoom"
+              style={{ textDecoration: "none", color: "black", scale: 0.75 }}
+            >
+              <p>Join Room</p>
+            </Link>
+          </div>
         </div>
       </div>
     </main>

@@ -38,7 +38,7 @@
   height: 75%;
   width: 100%;
   overflow-y: hidden;
-  color: rgba(255, 255, 255, 0.5);
+  color: var(--boxes);
   margin-top: 10%;
   overflow: scroll;
   overflow-x: hidden;
@@ -63,8 +63,8 @@
   border-radius: 10px;
   font-size: 15px;
   font-weight: bold;
-  background-color: rgba(255, 255, 255, 0.5);
-  color: #000000;
+  background-color: var(--boxes);
+  color: var(--background);
   border-color: transparent;
 }
 
@@ -81,19 +81,19 @@
   font-weight: bold;
   text-align: center;
   text-decoration: none;
-  background-color: rgba(255, 255, 255, 0.5);
-  color: #000000;
+  background-color: var(--boxes);
+  color: var(--background);
   border: none;
   border-radius: 10px;
   cursor: pointer;
 }
 
 .chatSubmitBoxForm button:hover {
-  background-color: rgba(255, 255, 255, 0.7);
+  background-color: var(--backgroundHover);
 }
 
 .chatSubmitBoxForm button:active {
-  background-color: rgba(255, 255, 255, 1);
+  background-color: var(--backgroundActive);
 }
 
 .mainLayoutDivSub2JoinBtn {
@@ -102,7 +102,7 @@
   font-weight: bold;
   text-align: center;
   text-decoration: none;
-  background-color: rgba(255, 255, 255, 0.5);
+  background-color: var(--boxes);
   color: #000000;
   border: none;
   border-radius: 5px;
@@ -110,11 +110,11 @@
 }
 
 .mainLayoutDivSub2JoinBtn:hover {
-  background-color: rgba(255, 255, 255, 0.7);
+  background-color: var(--backgroundHover);
 }
 
 .mainLayoutDivSub2JoinBtn:active {
-  background-color: rgba(255, 255, 255, 1);
+  background-color: var(--backgroundActive);
 }
 
 @media (max-width: 800px) {

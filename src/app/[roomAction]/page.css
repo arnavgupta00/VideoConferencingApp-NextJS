@@ -21,16 +21,7 @@
   border-radius: 15px;
   gap: 15px;
 }
-.roomBoxRoom{
-  height: 100px;
-  border-radius: 15px;
-  width: 12vw;
-  text-align: center;
-  padding-top:40px ;
-  background-color: black;
-  color: rgba(255, 255, 255, 0.5)
-  
-}
+
 #mainLayoutDivSub2 {
   text-decoration: none;
   width: 83%;

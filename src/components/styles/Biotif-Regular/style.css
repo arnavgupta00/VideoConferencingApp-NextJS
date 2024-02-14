@@ -1,0 +1,9 @@
+@font-face {
+    font-family: 'Biotif';
+    src: local('Biotif Regular'), local('Biotif-Regular'),
+        url('Biotif-Regular.woff2') format('woff2'),
+        url('Biotif-Regular.woff') format('woff'),
+        url('Biotif-Regular.ttf') format('truetype');
+    font-weight: 400;
+    font-style: normal;
+  }
