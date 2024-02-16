@@ -42,6 +42,7 @@ import {
   addPeerConnection,
   getPeerConnections,
   removePeerConnection,
+  authenticationObject,
 } from "@/components/variableSet/variableSet";
 
 const page = () => {
@@ -686,7 +687,7 @@ const page = () => {
 
   return (
     <>
-      <Navbar />
+      <Navbar userName={authenticationObject?.user?.name} authenticationCall={authenticationObject?.authenticated} />
       <div id="mainLayoutDiv">
         <div id="mainLayoutDivSub1">
           <div

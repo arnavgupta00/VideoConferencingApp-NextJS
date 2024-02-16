@@ -3,13 +3,14 @@ import Form from "./form";
 
 import "@/app/[roomAction]/page.css";
 import Navbar from "@/components/navbar/navbar";
+import { authenticationObject } from "@/components/variableSet/variableSet";
 
 const page = ({ params }: { params: { roomAction: string } }) => {
   const action: string = params.roomAction;
 
   return (
     <>
-      <Navbar />
+      <Navbar userName={authenticationObject?.user?.name} authenticationCall={authenticationObject?.authenticated} />
       <div id="mainLayoutDiv">
         <div id="mainLayoutDivSub1"></div>
         <div id="mainLayoutDivSub2">
