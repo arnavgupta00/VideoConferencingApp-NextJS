@@ -18,7 +18,9 @@
   --backgroundActive: rgba(255, 255, 255, 1);
 } */
 
-
+*{
+  user-select: none;
+}
 
 html {
   background: var(--background);;

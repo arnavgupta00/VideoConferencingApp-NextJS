@@ -6,6 +6,7 @@ import {
   setRoomNoVar,
   setFormData,
   formData,
+  authenticationObject,
 } from "../../components/variableSet/variableSet";
 import {
   handleOnJoin,
@@ -33,9 +34,16 @@ const Form: React.FC<FormProps> = ({ actionCreate }) => {
   };
 
   const numberRoom = rn(options);
+
+  const email = authenticationObject?.user?.email
+  const name = authenticationObject?.user?.name
   setFormData({ ...formData, userRoomNumber: numberRoom });
 
-  useEffect(() => {}, []);
+  useEffect(() => {
+    setFormData({ ...formData, userName: authenticationObject?.user?.name });
+    setFormData({ ...formData, userEmail: authenticationObject?.user?.email });
+    
+  }, []);
 
   return (
     <div className="formBox">
@@ -46,6 +54,7 @@ const Form: React.FC<FormProps> = ({ actionCreate }) => {
             type="text"
             name="userName"
             placeholder="Enter Full Name"
+            value={name}
             onChange={signSearchHandle}
           />
           <input
@@ -53,6 +62,7 @@ const Form: React.FC<FormProps> = ({ actionCreate }) => {
             type="text"
             name="userEmail"
             placeholder="Enter e-mail"
+            value={email}
             onChange={signSearchHandle}
           />
           <input
@@ -81,6 +91,7 @@ const Form: React.FC<FormProps> = ({ actionCreate }) => {
             className="signinput"
             type="text"
             name="userName"
+            value={name}
             placeholder="Enter Full Name"
             onChange={signSearchHandle}
           />
@@ -89,6 +100,7 @@ const Form: React.FC<FormProps> = ({ actionCreate }) => {
             type="text"
             name="userEmail"
             placeholder="Enter e-mail"
+            value={email}
             onChange={signSearchHandle}
           />
           <input

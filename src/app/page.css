@@ -20,7 +20,71 @@
   align-items: center;
   flex-direction: column;
   border-radius: 15px;
+  
   gap: 15px;
+}
+.mainLayoutDivSub1Server {
+  width: 90%;
+  height: 20px;
+  background-color: var(--boxes);
+  color: var(--frontBox1);
+  border-radius: 15px;
+  
+  justify-content: center;
+  align-items: center;
+  display: flex;
+  flex-direction: row;
+  padding-top: 5px;
+  padding-bottom: 5px;
+  opacity: 0.7;
+  
+}
+.mainLayoutDivSub1ServerJoin{
+  width: 50%;
+  height: 100%;
+  text-align: center;
+  border-right: 1px solid var(--frontBox1);
+  font-size: clamp(8px, 2vw, 12px);
+  font-family: "Biotif Regular", sans-serif;
+  cursor:pointer;
+  user-select: none;
+  
+}
+
+.mainLayoutDivSub1ServerJoin:hover{
+  opacity: 0.7;
+}
+.mainLayoutDivSub1ServerJoin:active{
+  opacity: 0.3;
+}
+.mainLayoutDivSub1ServerCreate{
+  width: 50%;
+  height: 100%;
+  text-align: center;
+  font-size: clamp(8px, 2vw, 12px);
+  font-family: "Biotif Regular", sans-serif;
+  cursor:pointer;
+  user-select: none;
+}
+.mainLayoutDivSub1ServerCreate:hover{
+  opacity: 0.7;
+}
+.mainLayoutDivSub1ServerCreate:active{
+  opacity: 0.3;
+}
+.mainLayoutDivSub1Rooms {
+  width: 100%;
+  height: 95%;
+  background-color: var(--frontBox1);
+  color: var(--frontBox1);
+
+  border-radius: 25px;
+  overflow-y: scroll;
+  padding-top: 0px;
+  justify-content: center;
+  align-items: center;
+  display: flex;
+  flex-direction: column;
 }
 .roomBoxRoom {
   height: 50px;
@@ -31,6 +95,7 @@
   padding-bottom: 8px;
   background-color: var(--background);
   color: var(--boxes);
+  margin-top: 10px;
 }
 #mainLayoutDivSub2 {
   text-decoration: none;
@@ -78,7 +143,7 @@
   width: 270px;
   background-color: var(--boxes);
   border-radius: 55px;
-  
+
   padding-bottom: 95px;
 }
 .joinRoom {
@@ -90,13 +155,93 @@
   padding-bottom: 95px;
 }
 
+.loginPageForm {
+  width: 90%;
+  padding-left: 20px;
+  padding-right: 20px;
+  max-width: 400px;
+  border-radius: 5px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  height: 100%;
+  margin-left: 15%;
+}
+.loginPageHeading {
+  font-family: "Biotif Mid", sans-serif;
+  color: var(--boxes);
+  margin-bottom: 15px;
+  font-size: clamp(0.5rem, 1.5rem);
+  width: 100%;
+  max-width: 400px;
+  text-align: start;
+  padding-left: 20px;
+  margin: 0%;
+}
+.loginPageFormInput {
+  width: 90%;
+  margin-bottom: 20px;
+  padding: 15px;
+  border: 1px solid #ddd;
+  border-radius: 10px;
+  font-size: 16px;
+  outline: none;
+  height: 25px;
+}
+
+.loginPageFormButton {
+  width: 90%;
+  height: 25px;
+  padding: 10px;
+  padding-bottom: 30px;
+  border: none;
+  border-radius: 10px;
+  font-size: 16px;
+  outline: none;
+  font-weight: bold;
+  background-color: #f5f5f5;
+  cursor: pointer;
+  transition: 0.3s;
+  text-align: center;
+}
+
+.loginPageFormButton:hover {
+  background-color: #f5f5f5;
+  color: #000;
+  opacity: 0.8;
+}
+.loginPageFormButton:active {
+  opacity: 0;
+}
+
+.changeModes {
+  width: 90%;
+  height: 50px;
+  padding: 20px;
+
+  text-align: end;
+}
+.changeModesP {
+  font-size: clamp(10px, 2vw, 15px);
+  font-weight: bold;
+  color: var(--boxes);
+  cursor: pointer;
+
+  transition: 0.3s;
+}
+.changeModesP a {
+  color: var(--boxes);
+  text-decoration: underline;
+}
 @media (max-width: 800px) {
   #mainLayoutDiv {
     flex-direction: column-reverse;
   }
   #mainLayoutDivSub1 {
     width: 90%;
-    height: 50%;
+    height: fit-content;
     flex-direction: column;
     justify-content: space-between;
     align-self: center;
@@ -104,6 +249,11 @@
     min-height: 150px;
     max-height: 500px;
     overflow-y: scroll;
+  }
+  .mainLayoutDivSub1Rooms {
+    padding-top: 0px;
+    padding-bottom: 10px;
+    height: max-content;
   }
   .roomBoxRoom {
     width: 85vw;
@@ -139,11 +289,11 @@
     font-family: "Montserrat", sans-serif;
     font-weight: bolder;
   }
-  .mainLayoutDivSub2Tagline{
+  .mainLayoutDivSub2Tagline {
     visibility: collapse;
     width: 0%;
   }
- 
+
   .mainLayoutDivSub2Buttons {
     width: 100%;
     display: flex;
@@ -152,5 +302,16 @@
     align-items: center;
     gap: 15px;
     height: fit-content;
+  }
+  .loginPageBackground {
+    visibility: hidden;
+    width: 0%;
+  }
+  .loginPageForm {
+    width: 100%;
+    margin-left: 0%;
+  }
+  .loginPage {
+    width: 100%;
   }
 }

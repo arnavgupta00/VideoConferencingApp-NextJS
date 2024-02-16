@@ -1,40 +1,62 @@
 "use client";
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect } from "react";
 
 import "./dropdown.css";
+import { authenticationObject } from "../variableSet/variableSet";
+import { useRouter } from "next/navigation";
+import Cookies from "js-cookie";
 
-interface DropdownProps {
+export interface DropdownProps {
   userName: string;
+  authenticationCall: boolean;
 }
 
-const Dropdown: React.FC<DropdownProps> = (props) => {
-  const [ authenticationCall, setauthenticationCall] = useState<boolean>(true);
-  var result = props.userName;
- 
+const Dropdown: React.FC<DropdownProps> = (props:{userName:string , authenticationCall:boolean}) => {
 
-  if (authenticationCall === true) {
+  const router = useRouter();
+
+  
+
+  if (props.authenticationCall === true) {
     return (
-      <div className="container" style={{zIndex:15}}>
+      <div className="container" style={{ zIndex: 15 }}>
         <button className="btn">
-          <span> Hello , {result}</span>
+          <span> Hello , {props.userName}</span>
           <ul className="dropdown">
-            <li className="active"><a href="#">Profile Information</a></li>
-            <li><a href="#">Help</a></li>
-            <li onClick={() => { console.log("clicked logout")}}><a >Log Out</a></li>
+            <li>
+              <a href="#">Profile Information</a>
+            </li>
+            <li>
+              <a href="#">Help</a>
+            </li>
+            <li
+              onClick={() => {
+                Cookies.remove("LoginToken");
+                window.open("/", "_self");
+              }}
+            >
+              <a>Log Out</a>
+            </li>
           </ul>
         </button>
       </div>
     );
   } else {
     return (
-      <div className="container" style={{zIndex:15}}>
+      <div className="container" style={{ zIndex: 15 }}>
         <button className="btn">
-          <span>{"SignUp"}</span>
-          <ul className="dropdown" style={{marginLeft:"-50px"}}>
-            <li className="active" ><a >Login</a></li>
-            <li ><a >Sign Up</a></li>
-            <li><a >Help</a></li>
+          <span>{"SignUp/In"}</span>
+          <ul className="dropdown" style={{ marginLeft: "-50px" }}>
+            <li >
+              <a onClick={() => router.push("/login")}>Login</a>
+            </li>
+            <li >
+              <a onClick={() => router.push("/signup")}>Sign Up</a>
+            </li>
+            <li>
+              <a>Help</a>
+            </li>
           </ul>
         </button>
       </div>

@@ -1,6 +1,5 @@
 "use client";
-
-
+import "dotenv/config";
 import { use } from "react";
 import {
   setRoomNoVar,
@@ -9,26 +8,27 @@ import {
   roomNoVar,
   addClient,
   getClients,
+  setAuthenticatedObject,
+  authenticationObject,
 } from "../variableSet/variableSet";
-import "dotenv/config";
+import Cookies from "js-cookie";
 
 export var socket: WebSocket;
 
 export var socketReadyState: boolean = false;
 export const removeSocket = () => {
   socket?.close();
-}
+};
 export const setSocket = () => {
   
+
   socket = new WebSocket("wss://videochatsignallingserverrender.onrender.com/");
   socket.onopen = () => {
     console.log("WebSocket connection established.");
     socketReadyState = true;
-  
   };
 
   socket.onmessage = (event) => {
-    console.log("Received message:", event.data);
 
     const data = JSON.parse(event.data);
     if (data.type === "clientList") {
@@ -46,21 +46,18 @@ export const setSocket = () => {
 export var userAction = "";
 
 export const handleOnJoin = () => {
-  console.log(formData);
-  console.log(roomNoVar);
+  
   // startingStep("joinRoom", socket);
   userAction = "joinRoom";
 };
 
 export const handleOnCreate = () => {
-  console.log(formData);
-  console.log(roomNoVar);
+
   // startingStep("createRoom", socket);
   userAction = "createRoom";
 };
 
 export const startingStep = async (type: string, socket: WebSocket) => {
-  console.log("startingStepROOOOOOOOMNOOOOOO", roomNoVar);
   const sendString = JSON.stringify({
     type: type,
     roomId: "room" + roomNoVar,
@@ -69,12 +66,30 @@ export const startingStep = async (type: string, socket: WebSocket) => {
   if (socket.readyState === WebSocket.OPEN) {
     socket.send(sendString);
   } else {
-    if(type === "createRoom"){
-      window.location.replace('/roomCreate');
-    }else if(type === "joinRoom"){
-      window.location.replace('/roomJoin');
-    }  
-    
+    if (type === "createRoom") {
+      window.location.replace("/roomCreate");
+    } else if (type === "joinRoom") {
+      window.location.replace("/roomJoin");
+    }
   }
-  
+};
+
+export const authenticationCheck = async () => {
+  try {
+    
+    const response = await fetch("/api/authenticate", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+
+      body: JSON.stringify({ jwtToken: Cookies.get("LoginToken") }),
+    });
+    const data = await response.json();
+    console.log(data)
+    setAuthenticatedObject(data.verificationBool, data.user.email , data.user.name, data.user._id,data.user.servers)
+    return response;
+  } catch (error) {
+    console.error("Error during authentication:", error);
+  }
 };

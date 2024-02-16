@@ -1,39 +1,59 @@
-"use client"
+"use client";
 
+export var roomNoVar: any = 0;
 
-export var  roomNoVar: any = 0;
-
-export const setRoomNoVar = (value:any) => {
+export const setRoomNoVar = (value: any) => {
   roomNoVar = value;
 };
 
-export var  tempaa: number = 0;
+export var authenticationObject: {
+  authenticated: boolean,
+  user: {
+    email: string,
+    name: string,
+    id: string
+    servers: string[]
+  }
+};
 
-export const setTempaa = (value:number) => {
+export const setAuthenticatedObject = (authenticated: boolean, email: string, name: string, id: string, servers:string[]) => {
+  authenticationObject = {
+    authenticated,
+    user: {
+      email,
+      name,
+      id,
+      servers
+    }
+  };
+};
+
+
+
+export var tempaa: number = 0;
+
+export const setTempaa = (value: number) => {
   tempaa = value;
 };
 
-export var  streamLocal: MediaStream;
+export var streamLocal: MediaStream;
 
-export const setStreamLocal = (value:MediaStream) => {
+export const setStreamLocal = (value: MediaStream) => {
   streamLocal = value;
 };
 
-
 export const formData = {
-    userName: '',
-    userEmail: '',
-    userRoomNumber: '1111',
+  userName: "",
+  userEmail: "",
+  userRoomNumber: "1111",
 };
 
 export const setFormData = (data: any) => {
-    formData.userName = data.userName;
-    formData.userEmail = data.userEmail;
-    formData.userRoomNumber = data.userRoomNumber;
-    setRoomNoVar(data.userRoomNumber);
-
+  formData.userName = data.userName;
+  formData.userEmail = data.userEmail;
+  formData.userRoomNumber = data.userRoomNumber;
+  setRoomNoVar(data.userRoomNumber);
 };
-
 
 type PeerConnectionStorage = {
   [key: string]: RTCPeerConnection;
@@ -53,11 +73,9 @@ export const getPeerConnections = (): PeerConnectionStorage => {
   return { ...peerConnections }; // Return a copy to avoid direct manipulation
 };
 
-
-
 let clients: string[] = [];
 
-export const addClient = (id:string) => {
+export const addClient = (id: string) => {
   clients.push(id);
 };
 
@@ -66,5 +84,5 @@ export const removeClient = (id: string) => {
 };
 
 export const getClients = () => {
-  return [...clients]; 
+  return [...clients];
 };
