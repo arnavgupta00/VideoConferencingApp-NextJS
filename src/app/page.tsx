@@ -13,7 +13,6 @@ import {
 } from "@/components/variableSet/variableSet";
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
-import { Any } from "react-spring";
 
 export default function Home() {
   const router = useRouter();
