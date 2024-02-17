@@ -1,5 +1,6 @@
-"use client";
-import "dotenv/config";
+
+import dotenv from "dotenv";
+dotenv.config();
 import { use } from "react";
 import {
   setRoomNoVar,
@@ -12,17 +13,24 @@ import {
   authenticationObject,
 } from "../variableSet/variableSet";
 import Cookies from "js-cookie";
+import { WebsocketServer } from "@/components/websocketServerUrl";
 
 export var socket: WebSocket;
+
+
 
 export var socketReadyState: boolean = false;
 export const removeSocket = () => {
   socket?.close();
 };
+
+
 export const setSocket = () => {
   
 
-  socket = new WebSocket("wss://videochatsignallingserverrender.onrender.com/");
+
+
+  socket = new WebSocket(WebsocketServer()) ;
   socket.onopen = () => {
     console.log("WebSocket connection established.");
     socketReadyState = true;
