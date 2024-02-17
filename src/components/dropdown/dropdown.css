@@ -1,41 +1,25 @@
-:root{
-    --main-color: black ;
+:root {
+    --main-color: black;
     --second-color: rgb(238, 236, 236);
-    --button-bottom: rgb(54, 54, 54);
-    --search: rgb(207, 207, 207);
-    --border: rgb(54, 54, 54);
-    --break: rgb(179, 184, 185);
-    --shadow-search: rgba(55, 162, 233, 0.3);
-    --shadow-submit:#369ee3;
-  }
 
-/* Body */
+    --border-radius-dropdown: 15px;
+}
 
-/* body {
-    background: #f5f5f5;
-    height: 100%;
-    color: rgba(0, 0, 0, .87);
-    font-family: "Roboto", sans-serif;
-    font-size: 14px;
-    font-weight: 400;
-    line-height: 1.5em;
-    -webkit-font-smoothing: antialiased;
-    -moz-osx-font-smoothing: grayscale;
-} */
+
 .container {
     position: relative;
-   
-    transform: translate(-50%, -50%);
+    transform: translate(-10%, -50%);
 }
+
 .btn {
     outline: 0;
     display: inline-flex;
     align-items: center;
     justify-content: space-between;
     background: var(--second-color);
-    width: max-content  ;
+    width: max-content;
     border: 0;
-    border-radius: 4px;
+    border-radius: var(--border-radius-dropdown);
     box-shadow: 0 4px 12px rgba(0, 0, 0, .1);
     box-sizing: border-box;
     padding: 16px 20px;
@@ -46,33 +30,31 @@
     text-transform: uppercase;
     overflow: hidden;
     cursor: pointer;
-    opacity:0.5;
+    opacity: 0.5;
 }
-
-
 
 .btn:focus .dropdown, .btn:active .dropdown {
     transform: translate(0, 20px);
     opacity: 1;
     visibility: visible;
 }
-.btn .material-icons {
-    border-radius: 100%;
-}
+
 .btn .dropdown {
     position: absolute;
     top: 100%;
-    left: 0px;
+    left: 0;
     background: #fff;
     width: 150px;
-    border-radius: 4px;
+    /* max-height: 200px; 
+    overflow-y: auto;  */
+    border-radius: var(--border-radius-dropdown);
     box-shadow: 0 4px 12px rgba(0, 0, 0, .1);
     text-align: left;
     opacity: 0;
     visibility: hidden;
     transition: 0.3s ease;
-    
 }
+
 .btn .dropdown:before {
     content: '';
     position: absolute;
@@ -87,27 +69,35 @@
     border-left: 6px solid transparent;
     transform: rotate(-45deg);
     mix-blend-mode: multiple;
+
+    border-radius: var(--border-radius-dropdown);
 }
+
 .btn .dropdown li {
-    z-index: 10;
     position: relative;
     background: #fff;
-    padding: 0 20px;
+    padding: 16px 20px;
     color: #666;
+    height: 25px;
     
 }
+
 .btn .dropdown li.active {
-    color:  var(--second-color);
+    color: var(--second-color);
 }
+
 .btn .dropdown li:first-child {
-    border-radius: 4px 4px 0 0;
+    border-radius: var(--border-radius-dropdown) var(--border-radius-dropdown) 0 0;
 }
+
 .btn .dropdown li:last-child {
-    border-radius: 0 0 4px 4px;
+    border-radius: 0 0 var(--border-radius-dropdown) var(--border-radius-dropdown);
 }
+
 .btn .dropdown li:last-child a {
     border-bottom: 0;
 }
+
 .btn .dropdown a {
     display: block;
     border-bottom: 1px solid rgba(0, 0, 0, .05);
@@ -117,48 +107,30 @@
     text-decoration: none;
 }
 
-.dropdown li:hover{
-    opacity:0.2;
-}
-.dropdown li:active{
-    opacity:0;
+.dropdown li:hover, .dropdown li:active {
+    opacity: 0.2;
 }
 
-@media (min-width:200px) and (max-width: 900px) {
+@media (min-width: 200px) and (max-width: 900px) {
     .btn {
-        outline: 0;
-        display: inline-flex;
-        align-items: center;
-        justify-content: space-between;
-        background: var(--second-color);
-        width: 50px;
-        border: 0;
-        border-radius: 25%;
-        margin-top: -50px;
-        box-shadow: 0 4px 12px rgba(0, 0, 0, .1);
-        box-sizing: border-box;
-        padding: 16px 20px;
-        color: var(--main-color);
-        font-size: 0;
-        font-weight: 600;
-        letter-spacing: 1.2px;
-        text-transform: uppercase;
-        overflow: hidden;
-        cursor: pointer;
+        width: max-content;
+        font-size: 12px;
+        height: 35px;
+        margin-bottom: 5px;
     }
     .btn .dropdown {
-        position: absolute;
-        top: 100%;
-        left: -60px;
-        background: #fff;
-        width: 100px;
-        border-radius: 4px;
-        box-shadow: 0 4px 12px rgba(0, 0, 0, .1);
-        text-align: left;
-        opacity: 0;
-        visibility: hidden;
-        transition: 0.3s ease;
-        padding-left: 5px;
+        left: 0px;
+        width: 150px;
+        padding-left: 25px;
         padding-right: 10px;
+    }
+    .btn .dropdown li {
+        position: relative;
+        background: #fff;
+        padding: 8px 10px;
+        color: #666;
+        height: 45px;
+        width: 100%;
+        
     }
 }

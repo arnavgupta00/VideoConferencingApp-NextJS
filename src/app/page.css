@@ -278,21 +278,43 @@
   }
   #mainLayoutDivSub2 {
     width: 95%;
-    height: 10vh;
+    height: max-content;
     max-width: 97vw;
     display: flex;
-    flex-direction: row;
+    flex-direction: column;
     justify-content: space-between;
     align-items: center;
     gap: 0;
     font-size: 35px;
     font-family: "Montserrat", sans-serif;
     font-weight: bolder;
+    padding: 0px;
   }
   .mainLayoutDivSub2Tagline {
+    width: 100%;
+    margin-left: 15px;
+  }
+  .mainLayoutDivSub2h1 {
+    margin: 0%;
+    font-size: clamp(3.7rem, 8vw, 6.5rem);
+    font-family: "Biotif Mid", sans-serif;
+    opacity: 0.3;
+    color: var(--boxes);
+  }
+  .mainLayoutDivSub2Buttons {
+    width: 25%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 15px;
+    margin-top: 70px;
+    margin-bottom: 20px;
+  }
+  /* .mainLayoutDivSub2Tagline {
     visibility: collapse;
     width: 0%;
-  }
+  } */
 
   .mainLayoutDivSub2Buttons {
     width: 100%;

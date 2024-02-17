@@ -1,12 +1,25 @@
 @import url("https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Montserrat:wght@100&family=Oswald:wght@700&family=Poppins:wght@700&family=Roboto&family=Satisfy&family=Tektur:wght@400;800&display=swap");
 
-#mainLayoutDiv {
+
+
+#mainLayoutDivRoomAction {
   display: flex;
   flex-direction: row;
   justify-content: center;
   align-items: center;
 }
-#mainLayoutDivSub1 {
+.loginPageHeadingRoomAction{
+  font-family: "Biotif Mid", sans-serif;
+  color: var(--boxes);
+  margin-bottom: 15px;
+  font-size: clamp(0.3rem, 1rem);
+  width: 100%;
+  max-width: 300px;
+  text-align: start;
+  margin: 0%;
+  text-align: left;
+}
+#mainLayoutDivSub1RoomAction {
   width: 15%;
   margin: 1%;
   margin-top: 50px;
@@ -22,7 +35,7 @@
   gap: 15px;
 }
 
-#mainLayoutDivSub2 {
+#mainLayoutDivSub2RoomAction {
   text-decoration: none;
   width: 83%;
 
@@ -43,7 +56,7 @@
   font-weight: bolder;
   border-radius: 15px;
 }
-.signinput {
+.signinputRoomAction {
   height: 50px;
   width: 300px;
   border-radius: 10px;
@@ -52,7 +65,7 @@
   border: 2px solid transparent;
   font-family: "Oswald", sans-serif;
 }
-.signSubmit {
+.signSubmitRoomAction {
   margin-top: 15px;
   height: 35px;
   border-radius: 15px;
@@ -62,22 +75,23 @@
   width: 315px;
 }
 
-.signSubmit:active {
+.signSubmitRoomAction:active {
   opacity: 0.1;
 }
 
-.formBox {
+.formBoxRoomAction {
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
+  width: 100%;
 }
 
 @media (max-width: 800px) {
-  #mainLayoutDiv {
+  #mainLayoutDivRoomAction {
     flex-direction: column-reverse;
   }
-  #mainLayoutDivSub1 {
+  #mainLayoutDivSub1RoomAction {
     width: 90%;
     height: 50%;
     flex-direction: row;
@@ -86,39 +100,41 @@
     max-width: 97vw;
     min-height: 150px;
   }
-  .createRoom {
+  .createRoomRoomAction {
     margin-right: 15px;
     margin-left: 0;
   }
-  .joinRoom {
+  .joinRoomRoomAction {
     margin-right: 15px;
     margin-left: 0;
   }
-  #mainLayoutDivSub2 {
+  #mainLayoutDivSub2RoomAction {
     width: 95%;
-    height: 50vh;
+    height: max-content;
     max-width: 97vw;
     display: flex;
-    flex-direction: row;
+    flex-direction: column;
     justify-content: space-between;
     align-items: center;
 
     font-size: 35px;
     font-family: "Montserrat", sans-serif;
     font-weight: bolder;
+
+    padding-bottom: 80px;
   }
-  .signinput {
+  .signinputRoomAction {
     width: 250px;
     height: 40px;
   }
-  .signSubmit {
+  .signSubmitRoomAction {
     width: 250px;
     height: 30px;
   }
-  #mainLayoutDiv {
+  #mainLayoutDivRoomAction {
     flex-direction: column-reverse;
   }
-  #mainLayoutDivSub1 {
+  #mainLayoutDivSub1RoomAction {
     width: 90%;
     height: 50%;
     flex-direction: row;
@@ -127,15 +143,15 @@
     max-width: 97vw;
     min-height: 150px;
   }
-  .createRoom {
+  .createRoomRoomAction {
     margin-right: 15px;
     margin-left: 0;
   }
-  .joinRoom {
+  .joinRoomRoomAction {
     margin-right: 15px;
     margin-left: 0;
   }
-  #mainLayoutDivSub2 {
+  #mainLayoutDivSub2RoomAction {
     width: 95%;
     height: 50vh;
     max-width: 97vw;

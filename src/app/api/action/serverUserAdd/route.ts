@@ -1,4 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
+import jwt from "jsonwebtoken";
+import bcrypt from "bcrypt";
 import {
   serverCollection,
   userCollection,
@@ -18,7 +20,10 @@ export async function POST(request: Request) {
         { status: 400 }
       );
     }
-    if (existingServer.password !== body.password) {
+
+    const result = await bcrypt.compare(body.password, existingServer.password);
+
+    if (!result) {
       return NextResponse.json(
         { message: "Incorrect password" },
         { status: 401 }

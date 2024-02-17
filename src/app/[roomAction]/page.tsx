@@ -11,9 +11,9 @@ const page = ({ params }: { params: { roomAction: string } }) => {
   return (
     <>
       <Navbar userName={authenticationObject?.user?.name} authenticationCall={authenticationObject?.authenticated} />
-      <div id="mainLayoutDiv">
-        <div id="mainLayoutDivSub1"></div>
-        <div id="mainLayoutDivSub2">
+      <div id="mainLayoutDivRoomAction">
+        <div id="mainLayoutDivSub1RoomAction"></div>
+        <div id="mainLayoutDivSub2RoomAction">
           {action === "roomCreate" && <Form actionCreate="true" />}
           {action === "roomJoin" && (
             <>

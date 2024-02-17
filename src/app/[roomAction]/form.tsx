@@ -35,22 +35,24 @@ const Form: React.FC<FormProps> = ({ actionCreate }) => {
 
   const numberRoom = rn(options);
 
-  const email = authenticationObject?.user?.email
-  const name = authenticationObject?.user?.name
+  const email = authenticationObject?.user?.email;
+  const name = authenticationObject?.user?.name;
   setFormData({ ...formData, userRoomNumber: numberRoom });
 
   useEffect(() => {
     setFormData({ ...formData, userName: authenticationObject?.user?.name });
     setFormData({ ...formData, userEmail: authenticationObject?.user?.email });
-    
   }, []);
 
   return (
-    <div className="formBox">
+    <div className="formBoxRoomAction">
       {actionCreate === "true" ? (
-        <div className="formBox">
+        <div className="formBoxRoomAction">
+          <div className="loginPageHeadingRoomAction">
+            <h1>Create Room</h1>
+          </div>
           <input
-            className="signinput"
+            className="signinputRoomAction"
             type="text"
             name="userName"
             placeholder="Enter Full Name"
@@ -58,7 +60,7 @@ const Form: React.FC<FormProps> = ({ actionCreate }) => {
             onChange={signSearchHandle}
           />
           <input
-            className="signinput"
+            className="signinputRoomAction"
             type="text"
             name="userEmail"
             placeholder="Enter e-mail"
@@ -66,7 +68,7 @@ const Form: React.FC<FormProps> = ({ actionCreate }) => {
             onChange={signSearchHandle}
           />
           <input
-            className="signinput"
+            className="signinputRoomAction"
             type="text"
             name="userRoomNumber"
             placeholder="Enter Room Number"
@@ -76,7 +78,7 @@ const Form: React.FC<FormProps> = ({ actionCreate }) => {
 
           <Link href={"/callRoom"}>
             <input
-              className="signSubmit"
+              className="signSubmitRoomAction"
               type="submit"
               value="Create Room"
               onClick={() => {
@@ -86,9 +88,12 @@ const Form: React.FC<FormProps> = ({ actionCreate }) => {
           </Link>
         </div>
       ) : (
-        <div className="formBox">
+        <div className="formBoxRoomAction">
+          <div className="loginPageHeadingRoomAction">
+            <h1>Join Room </h1>
+          </div>
           <input
-            className="signinput"
+            className="signinputRoomAction"
             type="text"
             name="userName"
             value={name}
@@ -96,7 +101,7 @@ const Form: React.FC<FormProps> = ({ actionCreate }) => {
             onChange={signSearchHandle}
           />
           <input
-            className="signinput"
+            className="signinputRoomAction"
             type="text"
             name="userEmail"
             placeholder="Enter e-mail"
@@ -104,7 +109,7 @@ const Form: React.FC<FormProps> = ({ actionCreate }) => {
             onChange={signSearchHandle}
           />
           <input
-            className="signinput"
+            className="signinputRoomAction"
             type="text"
             name="userRoomNumber"
             placeholder="Enter Room Number"
@@ -113,7 +118,7 @@ const Form: React.FC<FormProps> = ({ actionCreate }) => {
 
           <Link href={"/callRoom"}>
             <input
-              className="signSubmit"
+              className="signSubmitRoomAction"
               type="submit"
               value="Join Room"
               onClick={() => {

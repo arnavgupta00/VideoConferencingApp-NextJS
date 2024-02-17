@@ -1,5 +1,4 @@
 "use client";
-import "@/app/page.css";
 import "@/app/callRoom/page.css";
 import Navbar from "@/components/navbar/navbar";
 import { useRef, useEffect, useState } from "react";
@@ -688,15 +687,15 @@ const page = () => {
   return (
     <>
       <Navbar userName={authenticationObject?.user?.name} authenticationCall={authenticationObject?.authenticated} />
-      <div id="mainLayoutDiv">
-        <div id="mainLayoutDivSub1">
+      <div id="mainLayoutDivCallRoom">
+        <div id="mainLayoutDivSub1CallRoom">
           <div
-            className="mainLayoutDivSub1VideoBox"
+            className="mainLayoutDivSub1VideoBoxCallRoom"
             style={{ borderRadius: "15px" }}
           >
             {localaStreamState ? (
               <ReactPlayer
-                className="mainLayoutDivSub1VideoBoxVideo"
+                className="mainLayoutDivSub1VideoBoxVideoCallRoom"
                 url={localaStreamState}
                 playing
                 playsInline
@@ -705,7 +704,7 @@ const page = () => {
             ) : (
               <div></div>
             )}
-            <div className="mainLayoutDivSub1VideoBoxControls">
+            <div className="mainLayoutDivSub1VideoBoxControlsCallRoom">
               {videoPremission ? (
                 <Video
                   style={{ color: "white", scale: "2.5" }}
@@ -723,7 +722,7 @@ const page = () => {
               )}
               {audioPremission ? (
                 <Mic
-                  className="mainLayoutDivSub1VideoBoxControlsMic"
+                  className="mainLayoutDivSub1VideoBoxControlsMicCallRoom"
                   style={{ color: "white", scale: "2.5" }}
                   onClick={() => {
                     manageStreamControls("audio");
@@ -731,7 +730,7 @@ const page = () => {
                 />
               ) : (
                 <MicOff
-                  className="mainLayoutDivSub1VideoBoxControlsMic"
+                  className="mainLayoutDivSub1VideoBoxControlsMicCallRoom"
                   style={{ color: "white", scale: "2.5" }}
                   onClick={() => {
                     manageStreamControls("audio");
@@ -741,20 +740,20 @@ const page = () => {
 
               {isMobileOrTablet ? null : (
                 <ScreenShare
-                  className="mainLayoutDivSub1VideoBoxControlsScreenShare"
+                  className="mainLayoutDivSub1VideoBoxControlsScreenShareCallRoom"
                   style={{ color: "white", scale: "2.5", margin: "15px" }}
                   onClick={() => startScreenStream()}
                 />
               )}
               {isMobileOrTablet ? (
                 <MessageSquareMore
-                  className="mainLayoutDivSub1VideoBoxControlsMessageButtonMobile"
+                  className="mainLayoutDivSub1VideoBoxControlsMessageButtonMobileCallRoom"
                   style={{ color: "white", scale: "2.5", margin: "15px" }}
                   onClick={() => setChatBoxMobile(!chatBoxMobile)}
                 />
               ) : null}
               <Unplug
-                className="mainLayoutDivSub1VideoBoxControlsDisconnect"
+                className="mainLayoutDivSub1VideoBoxControlsDisconnectCallRoom"
                 style={{ color: "white", scale: "2.5" }}
                 onClick={() => handleDisconnect()}
               />
@@ -763,14 +762,14 @@ const page = () => {
           {isMobileOrTablet ? (
             <div></div>
           ) : (
-            <div className="chatSystem">
-              <div className="chatDisplayBox">
-                <div className="chatMessages">
+            <div className="chatSystemCallRoom">
+              <div className="chatDisplayBoxCallRoom">
+                <div className="chatMessagesCallRoom">
                   {messageList.map((message) => message)}
                 </div>
               </div>
               <form
-                className="chatSubmitBoxForm"
+                className="chatSubmitBoxFormCallRoom"
                 onSubmit={(event) => handleFormSubmit(event)}
               >
                 <input
@@ -787,11 +786,11 @@ const page = () => {
             </div>
           )}
         </div>
-        <div id="mainLayoutDivSub2">
+        <div id="mainLayoutDivSub2CallRoom">
           {remoteStream.length === 0
             ? userAction == "joinRoom" && (
                 <button
-                  className="mainLayoutDivSub2JoinBtn"
+                  className="mainLayoutDivSub2JoinBtnCallRoom"
                   onClick={() => handleStartVideoButton()}
                   style={{}}
                 >
@@ -816,7 +815,7 @@ const page = () => {
         </div>
         {chatBoxMobile ? (
           <div
-            className="chatSystem"
+            className="chatSystemCallRoom"
             style={{
               position: "absolute",
               width: "70vw",
@@ -835,13 +834,13 @@ const page = () => {
               }}
               onClick={() => setChatBoxMobile(!chatBoxMobile)}
             />
-            <div className="chatDisplayBox">
-              <div className="chatMessages">
+            <div className="chatDisplayBoxCallRoom">
+              <div className="chatMessagesCallRoom">
                 {messageList.map((message) => message)}
               </div>
             </div>
             <form
-              className="chatSubmitBoxForm"
+              className="chatSubmitBoxFormCallRoom"
               onSubmit={(event) => handleFormSubmit(event)}
             >
               <input
